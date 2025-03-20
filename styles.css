@@ -1,0 +1,10 @@
+/* styles.css */
+body {
+    font-family: inherit; 
+    font-size: inherit; 
+    line-height: inherit; 
+}
+
+video {
+    filter: brightness(70%);
+}

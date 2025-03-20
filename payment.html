@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveXpress | Payment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+    <link rel="apple-touch-icon" href="./assets/logo.png">
+    <meta name="msapplication-TileImage" content="./assets/logo.png">
+    <style>
+        .fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .cart-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ef4444; /* Red-500 */
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 30;
+        }
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #1f2937; /* Gray-800 */
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px; /* Increased size */
+            height: 500px; /* Square shape */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+        .car-image {
+            width: 100px;
+            height: 60px;
+            object-fit: contain; /* Maintain aspect ratio */
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Fixed Navigation Bar at the Top -->
+    <nav class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-75 text-white z-20 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-red-500">DriveXpress</h1>
+            <ul class="flex space-x-6">
+                <li><a href="index.html" class="hover:text-red-500">Home</a></li>
+                <li><a href="view-cars.html" class="hover:text-red-500">Cars</a></li>
+                <li><a href="about.html" class="hover:text-red-500">About</a></li>
+                <li><a href="contact.html" class="hover:text-red-500">Contact</a></li>
+                <li><a href="cart.html" class="hover:text-red-500">Cart</a></li>
+                <li id="logout-link" class="hidden"><a href="#" id="logout-btn" class="hover:text-red-500">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Floating Cart Icon -->
+    <a href="cart.html" class="cart-icon">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+        <span id="cart-count" class="cart-count">0</span>
+    </a>
+
+    <!-- Login Section -->
+    <section id="login-section" class="py-20 bg-gradient-to-r from-gray-100 to-gray-200 min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Sign In to Proceed</h2>
+            <p class="text-gray-600 mb-6">Please sign in to access the payment options.</p>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="email" class="block text-left text-gray-700 font-semibold mb-1">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Enter your email" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-left text-gray-700 font-semibold mb-1">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="w-full px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300">Sign In</button>
+            </form>
+            <p id="login-error" class="text-red-500 mt-4 hidden">Invalid email or password. Please try again.</p>
+            <div id="user-info" class="mt-6 hidden">
+                <p class="text-gray-800">Welcome, <span id="user-name"></span>!</p>
+                <p class="text-gray-600">You are now signed in. Proceed to payment below.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Section (Hidden Until Login) -->
+    <section id="payment-section" class="py-12 bg-gray-100 hidden">
+        <div class="container mx-auto px-4">
+            <!-- Price Breakdown -->
+            <div id="price-breakdown" class="bg-white p-6 rounded-lg shadow-lg mb-8 max-w-2xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Price Breakdown</h2>
+                <div id="no-car-message" class="text-center text-gray-600 hidden">
+                    <p>No car selected. Please add a car to your cart from the <a href="index.html" class="text-red-500 hover:underline">Home page</a>.</p>
+                </div>
+                <div id="breakdown-details" class="space-y-6 hidden">
+                    <div id="cart-items" class="space-y-4"></div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Shipping Agent:</span>
+                        <select id="shipping-agent" class="border rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-red-500">
+                            <option value="kline">K Line (₱50,000)</option>
+                            <option value="manila-forwarder">Manila Forwarder (₱30,000)</option>
+                            <option value="nex">NEX Worldwide Express (₱55,000)</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Shipping Fee:</span>
+                        <span id="shipping-fee" class="font-semibold text-gray-800">₱50,000</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Tax (<span id="tax-rate"></span>%):</span>
+                        <span id="tax-amount" class="font-semibold text-gray-800"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Processing Fee:</span>
+                        <span id="processing-fee" class="font-semibold text-gray-800">₱5,000</span>
+                    </div>
+                    <div class="flex justify-between border-t pt-3 mt-3">
+                        <span class="text-lg font-semibold text-gray-800">Total:</span>
+                        <span id="total-amount" class="text-lg font-semibold text-red-500"></span>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-600">Estimated Shipping Time: <span id="shipping-time" class="font-semibold text-gray-800">30-45 days</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Options -->
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Payment Options</h2>
+                <p class="text-gray-600 mb-8">Choose your preferred payment method to proceed.</p>
+                <div class="bg-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <form id="payment-form" class="space-y-6">
+                        <!-- Payment Method Selection -->
+                        <div class="space-y-4">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Select Payment Method</h3>
+                            <div class="flex justify-around">
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" name="payment-method" value="bdo" class="form-radio text-red-500" required>
+                                    <span class="text-gray-700">BDO</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" name="payment-method" value="bpi" class="form-radio text-red-500">
+                                    <span class="text-gray-700">BPI</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" name="payment-method" value="gcash" class="form-radio text-red-500">
+                                    <span class="text-gray-700">GCash</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Payment Details (Dynamically Updated) -->
+                        <div id="payment-details" class="space-y-4 hidden">
+                            <!-- BDO/BPI Fields -->
+                            <div id="card-details" class="space-y-4 hidden">
+                                <div>
+                                    <label for="card-number" class="block text-left text-gray-700 font-semibold mb-1">Card Number</label>
+                                    <input type="text" id="card-number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="1234 5678 9012 3456" pattern="\d{4}\s\d{4}\s\d{4}\s\d{4}">
+                                </div>
+                                <div class="flex space-x-4">
+                                    <div class="w-1/2">
+                                        <label for="expiry" class="block text-left text-gray-700 font-semibold mb-1">Expiry Date</label>
+                                        <input type="text" id="expiry" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="MM/YY" pattern="\d{2}/\d{2}">
+                                    </div>
+                                    <div class="w-1/2">
+                                        <label for="cvv" class="block text-left text-gray-700 font-semibold mb-1">CVV</label>
+                                        <input type="text" id="cvv" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="123" pattern="\d{3}">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- GCash Field -->
+                            <div id="gcash-details" class="space-y-4 hidden">
+                                <div>
+                                    <label for="gcash-number" class="block text-left text-gray-700 font-semibold mb-1">Phone Number</label>
+                                    <input type="tel" id="gcash-number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="09XX XXX XXXX" pattern="09\d{2}\s\d{3}\s\d{4}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loan vs Straight Payment -->
+                        <div id="payment-type" class="space-y-4 hidden">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Payment Type</h3>
+                            <div class="flex justify-around">
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" name="payment-type" value="straight" class="form-radio text-red-500" required>
+                                    <span class="text-gray-700">Straight Payment</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" name="payment-type" value="loan" class="form-radio text-red-500">
+                                    <span class="text-gray-700">Loan (20% Downpayment)</span>
+                                </label>
+                            </div>
+                            <div id="payment-amount-details" class="text-gray-600 mt-4 hidden">
+                                <p id="payment-amount-text"></p>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="w-full px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300">Proceed to Payment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Congratulatory Modal -->
+    <div id="congrats-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Congratulations on Your Purchase!</h2>
+            <p class="text-gray-600 mb-4">Thank You for Choosing DriveXpress. Enjoy Your New Ride!</p>
+            <div id="purchased-cars" class="flex flex-wrap justify-center gap-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // Login Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            const loginError = document.getElementById('login-error');
+            const userInfo = document.getElementById('user-info');
+            const userName = document.getElementById('user-name');
+            const loginSection = document.getElementById('login-section');
+            const paymentSection = document.getElementById('payment-section');
+            const logoutLink = document.getElementById('logout-link');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Price Breakdown Elements
+            const noCarMessage = document.getElementById('no-car-message');
+            const breakdownDetails = document.getElementById('breakdown-details');
+            const cartItems = document.getElementById('cart-items');
+            const shippingAgent = document.getElementById('shipping-agent');
+            const shippingFee = document.getElementById('shipping-fee');
+            const taxRate = document.getElementById('tax-rate');
+            const taxAmount = document.getElementById('tax-amount');
+            const processingFee = document.getElementById('processing-fee');
+            const totalAmount = document.getElementById('total-amount');
+            const shippingTime = document.getElementById('shipping-time');
+
+            // Payment Form Elements
+            const paymentForm = document.getElementById('payment-form');
+            const paymentDetails = document.getElementById('payment-details');
+            const cardDetails = document.getElementById('card-details');
+            const gcashDetails = document.getElementById('gcash-details');
+            const paymentTypeSection = document.getElementById('payment-type');
+            const paymentAmountDetails = document.getElementById('payment-amount-details');
+            const paymentAmountText = document.getElementById('payment-amount-text');
+
+            // Modal Elements
+            const congratsModal = document.getElementById('congrats-modal');
+            const purchasedCars = document.getElementById('purchased-cars');
+            const closeModal = document.querySelector('.close');
+
+            // Hardcoded credentials
+            const validEmail = 'admin123@gmail.com';
+            const validPassword = 'admin123';
+
+            // Cart
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Handle login form submission
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                if (email === validEmail && password === validPassword) {
+                    // Successful login
+                    loginError.classList.add('hidden');
+                    userName.textContent = email.split('@')[0]; // Display username (e.g., "admin123")
+                    userInfo.classList.remove('hidden');
+                    setTimeout(() => {
+                        loginSection.classList.add('hidden'); // Hide login section after 1 second
+                        paymentSection.classList.remove('hidden');
+                        logoutLink.classList.remove('hidden');
+                        loadPriceBreakdown();
+                    }, 1000);
+                } else {
+                    // Failed login
+                    loginError.classList.remove('hidden');
+                }
+            });
+
+            // Logout Functionality
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginSection.classList.remove('hidden');
+                paymentSection.classList.add('hidden');
+                logoutLink.classList.add('hidden');
+                userInfo.classList.add('hidden');
+                loginForm.reset();
+                loginError.classList.add('hidden');
+            });
+
+            // Update Cart Count
+            const cartCountElement = document.getElementById('cart-count');
+            cartCountElement.textContent = cart.length;
+
+            // Function to format numbers with commas
+            const formatNumber = (num) => {
+                return '₱' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            };
+
+            // Function to calculate tax (5-15% of total car price)
+            const calculateTax = (price) => {
+                const taxRate = (Math.random() * (15 - 5) + 5).toFixed(2); // Random tax rate between 5% and 15%
+                const tax = Math.round(price * (taxRate / 100));
+                return { taxRate, tax };
+            };
+
+            // Function to load price breakdown
+            const loadPriceBreakdown = () => {
+                cartItems.innerHTML = ''; // Clear previous items
+                if (cart.length === 0) {
+                    noCarMessage.classList.remove('hidden');
+                    breakdownDetails.classList.add('hidden');
+                    return;
+                }
+
+                let totalCarPrice = 0;
+                cart.forEach((car, index) => {
+                    const price = parseInt(car.price);
+                    totalCarPrice += price;
+
+                    // Create cart item element
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('flex', 'items-center', 'space-x-4', 'border-b', 'pb-4');
+                    itemDiv.innerHTML = `
+                        <img src="${car.image}" alt="${car.name}" class="car-image">
+                        <div class="flex-1">
+                            <p class="text-gray-800 font-semibold">${car.name}</p>
+                            <p class="text-gray-600">${formatNumber(price)}</p>
+                        </div>
+                        <button class="remove-item px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" data-index="${index}">Remove</button>
+                    `;
+                    cartItems.appendChild(itemDiv);
+                });
+
+                const { taxRate: rate, tax } = calculateTax(totalCarPrice);
+                let shippingCost = 50000; // Default to K Line
+
+                // Display breakdown details
+                noCarMessage.classList.add('hidden');
+                breakdownDetails.classList.remove('hidden');
+
+                // Update shipping fee and time based on selected agent
+                const updateShippingDetails = () => {
+                    const agent = shippingAgent.value;
+                    if (agent === 'kline') {
+                        shippingCost = 50000;
+                        shippingTime.textContent = '30-45 days';
+                    } else if (agent === 'manila-forwarder') {
+                        shippingCost = 30000; // Domestic rate
+                        shippingTime.textContent = '5-10 days';
+                    } else if (agent === 'nex') {
+                        shippingCost = 55000;
+                        shippingTime.textContent = '20-30 days';
+                    }
+                    shippingFee.textContent = formatNumber(shippingCost);
+                    updateTotal(totalCarPrice, shippingCost, tax);
+                };
+
+                // Update tax
+                taxRate.textContent = rate;
+                taxAmount.textContent = formatNumber(tax);
+
+                // Update processing fee
+                processingFee.textContent = formatNumber(5000);
+
+                // Update total
+                const updateTotal = (totalCarPrice, shipping, tax) => {
+                    const total = totalCarPrice + shipping + tax + 5000; // Total car price + shipping + tax + processing fee
+                    totalAmount.textContent = formatNumber(total);
+                    return total;
+                };
+
+                // Initial values
+                updateShippingDetails();
+
+                // Update shipping details when agent changes
+                shippingAgent.addEventListener('change', updateShippingDetails);
+
+                // Add event listeners to remove buttons
+                const removeButtons = document.querySelectorAll('.remove-item');
+                removeButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const index = parseInt(e.target.dataset.index);
+                        cart.splice(index, 1); // Remove item from cart
+                        localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+                        cartCountElement.textContent = cart.length; // Update cart count
+                        loadPriceBreakdown(); // Reload price breakdown
+                    });
+                });
+
+                return updateTotal(totalCarPrice, shippingCost, tax);
+            };
+
+            // Handle Payment Method Selection
+            const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
+            paymentMethods.forEach(method => {
+                method.addEventListener('change', () => {
+                    paymentDetails.classList.remove('hidden');
+                    paymentTypeSection.classList.remove('hidden');
+                    if (method.value === 'gcash') {
+                        gcashDetails.classList.remove('hidden');
+                        cardDetails.classList.add('hidden');
+                        // Remove required attribute from card fields
+                        document.getElementById('card-number').removeAttribute('required');
+                        document.getElementById('expiry').removeAttribute('required');
+                        document.getElementById('cvv').removeAttribute('required');
+                        // Add required attribute to GCash field
+                        document.getElementById('gcash-number').setAttribute('required', 'true');
+                    } else {
+                        gcashDetails.classList.add('hidden');
+                        cardDetails.classList.remove('hidden');
+                        // Add required attribute to card fields
+                        document.getElementById('card-number').setAttribute('required', 'true');
+                        document.getElementById('expiry').setAttribute('required', 'true');
+                        document.getElementById('cvv').setAttribute('required', 'true');
+                        // Remove required attribute from GCash field
+                        document.getElementById('gcash-number').removeAttribute('required');
+                    }
+                });
+            });
+
+            // Handle Card Number Input (Add space after every 4 digits)
+            const cardNumberInput = document.getElementById('card-number');
+            cardNumberInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                value = value.slice(0, 16); // Limit to 16 digits
+                let formattedValue = '';
+                for (let i = 0; i < value.length; i += 4) {
+                    if (i > 0) formattedValue += ' ';
+                    formattedValue += value.slice(i, i + 4);
+                }
+                e.target.value = formattedValue;
+            });
+
+            // Handle Expiry Date Input (MM/YY)
+            const expiryInput = document.getElementById('expiry');
+            expiryInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                if (value.length > 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                }
+                e.target.value = value;
+            });
+
+            // Handle Payment Type Selection
+            const paymentTypes = document.querySelectorAll('input[name="payment-type"]');
+            let total = 0;
+            paymentTypes.forEach(type => {
+                type.addEventListener('change', () => {
+                    paymentAmountDetails.classList.remove('hidden');
+                    total = parseInt(totalAmount.textContent.replace(/[^0-9]/g, '')); // Get total amount
+                    if (type.value === 'straight') {
+                        paymentAmountText.textContent = `You will pay the full amount: ${formatNumber(total)}`;
+                    } else {
+                        const downpayment = Math.round(total * 0.2); // 20% downpayment
+                        const loanAmount = total - downpayment;
+                        paymentAmountText.textContent = `Downpayment (20%): ${formatNumber(downpayment)}\nRemaining Loan Amount: ${formatNumber(loanAmount)}`;
+                    }
+                });
+            });
+
+            // Handle Payment Form Submission
+            paymentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+                const paymentType = document.querySelector('input[name="payment-type"]:checked').value;
+                total = parseInt(totalAmount.textContent.replace(/[^0-9]/g, ''));
+
+                let paymentDetails = '';
+                if (paymentMethod === 'gcash') {
+                    const phoneNumber = document.getElementById('gcash-number').value;
+                    paymentDetails = `Phone Number: ${phoneNumber}`;
+                } else {
+                    const cardNumber = document.getElementById('card-number').value;
+                    const expiry = document.getElementById('expiry').value;
+                    const cvv = document.getElementById('cvv').value;
+                    paymentDetails = `Card Number: ${cardNumber}\nExpiry: ${expiry}\nCVV: ${cvv}`;
+                }
+
+                // Show congratulatory modal
+                purchasedCars.innerHTML = '';
+                cart.forEach(car => {
+                    const img = document.createElement('img');
+                    img.src = car.image;
+                    img.alt = car.name;
+                    img.classList.add('w-40', 'h-auto', 'rounded-lg'); // Larger images in modal
+                    purchasedCars.appendChild(img);
+                });
+                congratsModal.style.display = 'block';
+
+                // Clear cart after purchase
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                cartCountElement.textContent = cart.length;
+            });
+
+            // Close modal
+            closeModal.addEventListener('click', () => {
+                congratsModal.style.display = 'none';
+                loadPriceBreakdown(); // Reload price breakdown to reflect empty cart
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === congratsModal) {
+                    congratsModal.style.display = 'none';
+                    loadPriceBreakdown();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

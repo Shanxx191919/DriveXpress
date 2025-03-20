@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveXpress | Cars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+    <link rel="apple-touch-icon" href="./assets/logo.png">
+    <meta name="msapplication-TileImage" content="./assets/logo.png">
+    <style>
+        .fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .selected-color {
+            color: #a3a6a0; 
+        }
+        .cart-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ef4444; /* Red-500 */
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 30;
+        }
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #1f2937; /* Gray-800 */
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+        }
+        .added-to-cart {
+            animation: addedToCart 0.5s ease-in-out;
+        }
+        @keyframes addedToCart {
+            0% { transform: scale(1); color: #3b82f6; }
+            50% { transform: scale(1.2); color: #10b981; }
+            100% { transform: scale(1); color: #3b82f6; }
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Fixed Navigation Bar at the Top -->
+    <nav class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-75 text-white z-20 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-red-500">DriveXpress</h1>
+            <ul class="flex space-x-6">
+                <li><a href="index.html" class="hover:text-red-500">Home</a></li>
+                <li><a href="view-cars.html" class="hover:text-red-500 active border-b-2 border-red-500 pb-1">Cars</a></li>
+                <li><a href="about.html" class="hover:text-red-500">About</a></li>
+                <li><a href="contact.html" class="hover:text-red-500">Contact</a></li>
+                <li><a href="cart.html" class="hover:text-red-500">Cart</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Floating Cart Icon -->
+    <a href="cart.html" class="cart-icon">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+        <span id="cart-count" class="cart-count">0</span>
+    </a>
+
+    <!-- Cars Section -->
+    <section class="mt-16 py-12 bg-gray-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800">OUR CARS</h2>
+            <div class="w-16 h-1 bg-red-500 mx-auto mt-2 mb-6"></div>
+
+            <!-- Search Bar and Filters -->
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4 mb-8">
+                <!-- Search Bar -->
+                <div class="relative w-full md:w-1/3">
+                    <input type="text" id="search-bar" placeholder="Search cars by name..." class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <svg class="absolute right-3 top-3 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <!-- Category Filter Buttons -->
+                <div class="flex justify-center space-x-4">
+                    <button class="filter-btn px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" data-category="all">All</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300" data-category="sedan">Sedan</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300" data-category="pickup">Pick Up Truck</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300" data-category="suv">SUV</button>
+                    <button class="filter-btn px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300" data-category="van">Van</button>
+                </div>
+                <!-- Price Sort Dropdown -->
+                <div>
+                    <select id="price-sort" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <option value="default">Sort by Price</option>
+                        <option value="low-to-high">Price: Low to High</option>
+                        <option value="high-to-low">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Car Grid -->
+            <div id="carGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Car 1: Sedan -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="sedan">
+                    <img class="car-image" src="./assets/camry/black.png" alt="Car 1" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Attitude Black Mica" data-image="./assets/camry/black.png"></div>
+                            <div class="w-6 h-6 bg-blue-700 rounded-full cursor-pointer" data-color="Dark Blue Mica" data-image="./assets/camry/blue.png"></div>
+                            <div class="w-6 h-6 bg-red-700 rounded-full cursor-pointer" data-color="Emotional Red" data-image="./assets/camry/red.png"></div>
+                            <div class="w-6 h-6 bg-yellow-700 rounded-full cursor-pointer" data-color="Precious Bronze" data-image="./assets/camry/brown.png"></div>
+                            <div class="w-6 h-6 bg-gray-500 rounded-full cursor-pointer" data-color="Precious Metal" data-image="./assets/camry/metal.png"></div>
+                            <div class="w-6 h-6 bg-gray-300 rounded-full cursor-pointer" data-color="Silver Metallic" data-image="./assets/camry/silver.png"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="Platinum White Pearl" data-image="./assets/camry/white.png"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Attitude Black Mica</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 3,391,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Camry</p>
+                    <p class="text-gray-600 text-sm">130,000km | 1800cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Camry" data-price="3391000">Buy Car</button>
+                </div>
+                <!-- Car 2: Sedan -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="sedan">
+                    <img class="car-image" src="./assets/yaris/Silver.jpg" alt="Car 2" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-gray-300 rounded-full cursor-pointer" data-color="Silver" data-image="./assets/yaris/Silver.jpg"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White Pearl Crystal Shine" data-image="./assets/yaris/White-Pearl.jpg"></div>
+                            <div class="w-6 h-6 bg-red-700 rounded-full cursor-pointer" data-color="Red" data-image="./assets/yaris/Red.jpg"></div>
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Black" data-image="./assets/yaris/Black.jpg"></div>
+                            <div class="w-6 h-6 bg-gray-500 rounded-full cursor-pointer" data-color="Gray" data-image="./assets/yaris/Gray.jpg"></div>
+                            <div class="w-6 h-6 bg-red-500 rounded-full cursor-pointer" data-color="Scarlet" data-image="./assets/yaris/Scarlet.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Silver</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 1,120,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Yaris</p>
+                    <p class="text-gray-600 text-sm">85,000km | 1800cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Yaris" data-price="1120000">Buy Car</button>
+                </div>
+                <!-- Car 3: Sedan -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="sedan">
+                    <img class="car-image" src="./assets/corolla/blue.png" alt="Car 2" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #6B7280;" data-color="Celestite Gray Metallic" data-image="./assets/corolla/blue.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #7F1D1D;" data-color="Red Mica Metallic" data-image="./assets/corolla/red.png"></div>
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Black Mica" data-image="./assets/corolla/black.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4B5563;" data-color="Gray Metallic" data-image="./assets/corolla/gray.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #D1D5DB;" data-color="Silver Metallic" data-image="./assets/corolla/silver.png"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="Platinum White Pearl Mica" data-image="./assets/corolla/white.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #E5E7EB;" data-color="Beige Metallic" data-image="./assets/corolla/beige.png"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Celestite Gray Metallic</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 1,500,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Corolla</p>
+                    <p class="text-gray-600 text-sm">100,000km | 1600cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Corolla" data-price="1500000">Buy Car</button>
+                </div>
+                <!-- Car 4: SUV -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="suv">
+                    <img class="car-image" src="./assets/fortuner/black.jpg" alt="Car 3" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Black" data-image="./assets/fortuner/black.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4B5563;" data-color="Gray" data-image="./assets/fortuner/Gray.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #D1D5DB;" data-color="Silver" data-image="./assets/fortuner/Silver.jpg"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White Pearl" data-image="./assets/fortuner/White-pearl.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Black</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 2,400,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Fortuner</p>
+                    <p class="text-gray-600 text-sm">110,000km | 2400cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Fortuner" data-price="2400000">Buy Car</button>
+                </div>
+                <!-- Car 5: SUV -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="suv">
+                    <img class="car-image" src="./assets/cruiser/White-Pearl.jpg" alt="Car 3" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-gray-300 rounded-full cursor-pointer" data-color="White Pearl CS" data-image="./assets/cruiser/White-Pearl.jpg"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="Precious White Pearl" data-image="./assets/cruiser/Precious-White-Pearl.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #9CA3AF;" data-color="Silver ME" data-image="./assets/cruiser/Silver.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4B5563;" data-color="Gray ME" data-image="./assets/cruiser/Gray.jpg"></div>
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Attitude Black MC" data-image="./assets/cruiser/Attitude-Black.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #7F1D1D;" data-color="DK. Red M.M." data-image="./assets/cruiser/Dark-Red.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #8B4513;" data-color="Avant-Grande Bronze ME" data-image="./assets/cruiser/Bronze.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">White Pearl CS</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 5,200,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Land Cruiser</p>
+                    <p class="text-gray-600 text-sm">90,000km | 3300cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Land Cruiser" data-price="5200000">Buy Car</button>
+                </div>
+                <!-- Car 6: SUV -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="suv">
+                    <img class="car-image" src="./assets/innova/black.png" alt="Car 3" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Attitude Black" data-image="./assets/innova/black.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4A4040;" data-color="Dark Steel" data-image="./assets/innova/dark.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4A2C2A;" data-color="Blackish Brown" data-image="./assets/innova/black-brown.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4B5563;" data-color="Bronze Metallic" data-image="./assets/innova/bronze.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #6B7280;" data-color="Gray Metallic" data-image="./assets/innova/gray.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #9CA3AF;" data-color="Silver Metallic" data-image="./assets/innova/silver.jpg"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White Pearl" data-image="./assets/innova/white.png"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Attitude Black</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 1,800,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Innova</p>
+                    <p class="text-gray-600 text-sm">95,000km | 2000cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Innova" data-price="1800000">Buy Car</button>
+                </div>
+                <!-- Car 7: Pick Up Truck -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="pickup">
+                    <img class="car-image" src="./assets/rebel/white.jfif" alt="Car 3" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="Bright White" data-image="./assets/rebel/white.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #DC2626;" data-color="Flame Red" data-image="./assets/rebel/red.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #D2B48C;" data-color="Mojave Sand" data-image="./assets/rebel/sand.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4A1C1E;" data-color="Delmonico Red Pearl" data-image="./assets/rebel/maroon.jfif"></div>
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Diamond Black Crystal Pearl" data-image="./assets/rebel/black.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #1E40AF;" data-color="Hydro Blue Pearl" data-image="./assets/rebel/blue.jfif"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Bright White</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 5,990,000</p>
+                    <p class="text-gray-700 font-bold">RAM 1500 Rebel</p>
+                    <p class="text-gray-600 text-sm">50,000km | 5700cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="RAM 1500 Rebel" data-price="5990000">Buy Car</button>
+                </div>
+                <!-- Car 8: Pick Up Truck -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="pickup">
+                    <img class="car-image" src="./assets/hilux/Super-White.jpg" alt="Car 4" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #D1D5DB;" data-color="Super White II" data-image="./assets/hilux/Super-White.jpg"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White Pearl" data-image="./assets/hilux/White-Pearl.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Super White II</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 2,000,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Hilux</p>
+                    <p class="text-gray-600 text-sm">120,000km | 2800cc | Manual</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Hilux" data-price="2000000">Buy Car</button>
+                </div>
+                <!-- Car 9: Pick Up Truck -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="pickup">
+                    <img class="car-image" src="./assets/silverado/red.png" alt="Car 4" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #B91C1C;" data-color="Red Hot" data-image="./assets/silverado/red.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #D1D5DB;" data-color="Summit White" data-image="./assets/silverado/white.png"></div>
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Black" data-image="./assets/silverado/black.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #374151;" data-color="Cypress Gray" data-image="./assets/silverado/gray.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #1E40AF;" data-color="Riptide Blue Metallic" data-image="./assets/silverado/blue.png"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #6B7280;" data-color="Slate Gray Metallic" data-image="./assets/silverado/gray-metallic.png"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Red Hot</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 2,400,000</p>
+                    <p class="text-gray-700 font-bold">Chevrolet Silverado</p>
+                    <p class="text-gray-600 text-sm">110,000km | 2400cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Chevrolet Silverado" data-price="2400000">Buy Car</button>
+                </div>
+                <!-- Car 10: Van -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="van">
+                    <img class="car-image" src="./assets/hiace/white-normal.png" alt="Car 5" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White" data-image="./assets/hiace/white-normal.png"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">White</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 2,100,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Hiace Van</p>
+                    <p class="text-gray-600 text-sm">140,000km | 2800cc | Manual</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Hiace Van" data-price="2100000">Buy Car</button>
+                </div>
+                <!-- Car 11: Van -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="van">
+                    <img class="car-image" src="./assets/hiace/hiace-bus.jpg" alt="Car 5" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White" data-image="./assets/hiace/hiace-bus.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">White</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 2,500,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Hiace Bus</p>
+                    <p class="text-gray-600 text-sm">150,000km | 3000cc | Manual</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Toyota Hiace Bus" data-price="2500000">Buy Car</button>
+                </div>
+                <!-- Car 12: Van -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="van">
+                    <img class="car-image" src="./assets/hyundai/h1.jpg" alt="Car 5" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White" data-image="./assets/hyundai/h1.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">White</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 1,900,000</p>
+                    <p class="text-gray-700 font-bold">Hyundai H-1</p>
+                    <p class="text-gray-600 text-sm">110,000km | 2500cc | Automatic</p>
+                    <button class="buy-car text-blue-500 hover:underline mt-2 inline-block" data-name="Hyundai H-1" data-price="1900000">Buy Car</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-gray-100 text-center text-gray-600">
+        <p>Copyright © 2025 DriveXpress - Made by Shan</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Color selection functionality for Cars
+            const carCards = document.querySelectorAll('.car-card');
+
+            carCards.forEach(card => {
+                const carImage = card.querySelector('.car-image');
+                const colorSwatches = card.querySelector('.color-swatches');
+                const selectedColor = card.querySelector('.selected-color');
+
+                colorSwatches.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('cursor-pointer')) {
+                        const color = e.target.getAttribute('data-color');
+                        const imageUrl = e.target.getAttribute('data-image');
+
+                        // Update selected color text
+                        selectedColor.textContent = color;
+
+                        // Add fade-out animation and change image
+                        carImage.classList.remove('fade');
+                        void carImage.offsetWidth; // Trigger reflow
+                        carImage.src = imageUrl;
+                        carImage.classList.add('fade');
+                    }
+                });
+            });
+
+            // Filter and Sort Functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const carGrid = document.getElementById('carGrid');
+            const carItems = Array.from(carGrid.querySelectorAll('.car-card'));
+            const searchBar = document.getElementById('search-bar');
+            const priceSort = document.getElementById('price-sort');
+            let currentCategory = 'all';
+            let currentSearch = '';
+            let currentSort = 'default';
+
+            // Function to apply filters and sorting
+            const applyFiltersAndSort = () => {
+                let filteredItems = carItems.filter(item => {
+                    const categoryMatch = currentCategory === 'all' || item.getAttribute('data-category') === currentCategory;
+                    const name = item.querySelector('.text-gray-700.font-bold').textContent.toLowerCase();
+                    const searchMatch = name.includes(currentSearch.toLowerCase());
+                    return categoryMatch && searchMatch;
+                });
+
+                // Sort by price if applicable
+                if (currentSort !== 'default') {
+                    filteredItems.sort((a, b) => {
+                        const priceA = parseInt(a.querySelector('.buy-car').getAttribute('data-price'));
+                        const priceB = parseInt(b.querySelector('.buy-car').getAttribute('data-price'));
+                        return currentSort === 'low-to-high' ? priceA - priceB : priceB - priceA;
+                    });
+                }
+
+                // Clear the grid and re-append filtered items
+                carGrid.innerHTML = '';
+                filteredItems.forEach(item => carGrid.appendChild(item));
+            };
+
+            // Category Filter
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    currentCategory = button.getAttribute('data-category');
+
+                    // Update button styles
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-red-500', 'text-white', 'hover:bg-red-600');
+                        btn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                    });
+                    button.classList.remove('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300');
+                    button.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600');
+
+                    applyFiltersAndSort();
+                });
+            });
+
+            // Search Bar
+            searchBar.addEventListener('input', (e) => {
+                currentSearch = e.target.value;
+                applyFiltersAndSort();
+            });
+
+            // Price Sort
+            priceSort.addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                applyFiltersAndSort();
+            });
+
+            // Shopping Cart Functionality
+            const cartCountElement = document.getElementById('cart-count');
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Function to generate random shipping fee (between ₱50,000 and ₱150,000)
+            const generateShippingFee = () => {
+                return Math.floor(Math.random() * (150000 - 50000 + 1)) + 50000;
+            };
+
+            // Function to generate random tax (between 5% and 15% of the car price)
+            const generateTax = (price) => {
+                const taxRate = (Math.random() * (15 - 5) + 5) / 100; // Random tax rate between 5% and 15%
+                return Math.round(price * taxRate);
+            };
+
+            // Function to update cart count
+            const updateCartCount = () => {
+                cartCountElement.textContent = cart.length;
+            };
+
+            // Function to add item to cart
+            const addToCart = (name, price, image, color, button) => {
+                const shippingFee = generateShippingFee();
+                const tax = generateTax(price);
+                cart.push({ name, price, shippingFee, tax, image, color });
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+
+                // Trigger animation on the button
+                button.classList.remove('added-to-cart');
+                void button.offsetWidth; // Trigger reflow to restart animation
+                button.classList.add('added-to-cart');
+                button.textContent = 'Added to Cart!';
+                setTimeout(() => {
+                    button.textContent = 'Buy Car';
+                }, 1000);
+            };
+
+            // Add event listeners to Buy Car buttons
+            document.querySelectorAll('.buy-car').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const name = button.getAttribute('data-name');
+                    const price = parseInt(button.getAttribute('data-price'));
+                    const card = button.closest('.car-card');
+                    const image = card.querySelector('.car-image').src;
+                    const color = card.querySelector('.selected-color').textContent;
+                    addToCart(name, price, image, color, button);
+                });
+            });
+
+            // Initial cart count display
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
