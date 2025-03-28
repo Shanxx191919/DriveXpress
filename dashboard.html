@@ -450,30 +450,28 @@
 
                 const carName = document.getElementById('car-name').value;
 
-                // Upload default image
+                // Use Data URL as fallback if upload fails
+                let defaultImageUrl = imagePreview.src || '/assets/placeholder.png';
+
+                // Attempt to upload default image
                 const defaultFormData = new FormData();
                 defaultFormData.append('image', carImageFile);
                 defaultFormData.append('name', carName);
 
-                let defaultImageUrl = '/assets/placeholder.png'; // Fallback
                 try {
                     const defaultResponse = await fetch('/api/upload-image', {
                         method: 'POST',
                         body: defaultFormData,
                     });
-                    if (!defaultResponse.ok) {
-                        throw new Error(`HTTP error! Status: ${defaultResponse.status}`);
-                    }
                     const defaultData = await defaultResponse.json();
                     if (defaultData.url) {
                         defaultImageUrl = defaultData.url;
                     } else {
-                        throw new Error('No URL returned from server');
+                        console.warn('Default image upload failed, using Data URL:', defaultData);
                     }
                 } catch (error) {
                     console.error('Error uploading default image:', error);
-                    alert('Failed to upload default image. Check server status and try again.');
-                    return; // Stop here if upload fails
+                    alert('Failed to upload default image, using local preview instead.');
                 }
 
                 // Upload additional colors
@@ -484,35 +482,32 @@
                     const colorValue = document.getElementById(`additional-color-${colorId}`).value;
                     const colorName = document.getElementById(`additional-color-name-${colorId}`).value;
                     const imageInput = document.getElementById(`additional-image-${colorId}`);
+                    const imagePreviewElement = document.getElementById(`image-preview-${colorId}`);
 
                     if (!imageInput.files[0] || !colorName) {
                         alert(`Please provide an image and name for Color ${parseInt(colorId) + 1}.`);
                         return;
                     }
 
+                    let additionalImageUrl = imagePreviewElement.src || '/assets/placeholder.png';
                     const additionalFormData = new FormData();
                     additionalFormData.append('image', imageInput.files[0]);
                     additionalFormData.append('name', `${carName}-color-${colorId}`);
 
-                    let additionalImageUrl = '/assets/placeholder.png'; // Fallback
                     try {
                         const additionalResponse = await fetch('/api/upload-image', {
                             method: 'POST',
                             body: additionalFormData,
                         });
-                        if (!additionalResponse.ok) {
-                            throw new Error(`HTTP error! Status: ${additionalResponse.status}`);
-                        }
                         const additionalData = await additionalResponse.json();
                         if (additionalData.url) {
                             additionalImageUrl = additionalData.url;
                         } else {
-                            throw new Error(`No URL returned for Color ${colorId}`);
+                            console.warn(`Additional image upload failed for Color ${colorId}, using Data URL:`, additionalData);
                         }
                     } catch (error) {
                         console.error(`Error uploading image for Color ${colorId}:`, error);
-                        alert(`Failed to upload image for Color ${parseInt(colorId) + 1}. Check server status and try again.`);
-                        return; // Stop here if upload fails
+                        alert(`Failed to upload image for Color ${parseInt(colorId) + 1}, using local preview instead.`);
                     }
 
                     additionalColors.push({
