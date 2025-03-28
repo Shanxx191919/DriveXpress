@@ -239,16 +239,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Admin Credentials
             const ADMIN_EMAIL = 'admin123@gmail.com';
             const ADMIN_PASSWORD = 'admin123';
-
-            // Login Logic
+    
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const loginModal = document.getElementById('login-modal');
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('main-content');
-
+    
             if (isLoggedIn) {
                 loginModal.classList.add('hidden');
                 sidebar.classList.remove('hidden');
@@ -258,14 +256,14 @@
                 sidebar.classList.add('hidden');
                 mainContent.classList.add('hidden');
             }
-
+    
             const loginForm = document.getElementById('login-form');
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
                 const rememberPassword = document.getElementById('remember-password').checked;
-
+    
                 if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
                     localStorage.setItem('isLoggedIn', 'true');
                     if (rememberPassword) {
@@ -282,7 +280,7 @@
                     alert('Invalid email or password.');
                 }
             });
-
+    
             const logoutBtn = document.getElementById('logout-btn');
             logoutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -295,32 +293,178 @@
                 loginForm.reset();
                 window.location.href = '/home';
             });
-
-            // Initial Car Listings (simplified for brevity)
-            const initialCarListings = [
-                { name: "Toyota Camry", price: 3391000, category: "sedan", mileage: 130000, engine: 1800, transmission: "Automatic", image: "/assets/camry/black.png", color: "Attitude Black Mica", stock: 10, colors: [
-                    { name: "Attitude Black Mica", image: "/assets/camry/black.png", bg: "bg-black" },
-                    { name: "Dark Blue Mica", image: "/assets/camry/blue.png", bg: "bg-blue-700" }
-                ]},
-                // Add more as needed...
-            ];
-
+    
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
             let carListings = JSON.parse(localStorage.getItem('carListings')) || [];
+            let analytics = JSON.parse(localStorage.getItem('analytics')) || {
+                pageviews: 4054876,
+                satisfaction: 93.13,
+                traffic: { organic: 44.46, referral: 5.54, other: 50 },
+                browsers: { chrome: 50, firefox: 10, explorer: 30, safari: 10 }
+            };
+    
+            const initialCarListings = [
+                { name: "Toyota Camry", price: 3391000, category: "sedan", mileage: 130000, engine: 1800, transmission: "Automatic", image: "/assets/camry/black.png", color: "Attitude Black Mica", stock: 10, colors: [{ name: "Attitude Black Mica", image: "/assets/camry/black.png", bg: "bg-black" }] }
+            ];
             if (!localStorage.getItem('carListings')) {
                 carListings = initialCarListings;
                 localStorage.setItem('carListings', JSON.stringify(carListings));
             }
-
-            // Image Dropzone
+    
+            function updateDashboard() {
+                const totalOrders = orders.length;
+                const totalSales = orders.reduce((sum, order) => sum + order.total, 0);
+                document.getElementById('total-orders').textContent = totalOrders;
+                document.getElementById('total-sales').textContent = `₱${totalSales.toLocaleString()}`;
+                document.getElementById('pageviews').textContent = analytics.pageviews.toLocaleString();
+                document.getElementById('satisfaction').textContent = `${analytics.satisfaction}%`;
+            }
+    
+            function getOrderStatus(order) {
+                if (order.status === 'delivered') return 'delivered';
+                else if (order.status === 'shipped') return 'shipped';
+                else if (order.status === 'released') return 'approved';
+                else return 'pending';
+            }
+    
+            function renderOrders() {
+                const containers = {
+                    pending: document.getElementById('pending-approval-orders'),
+                    approved: document.getElementById('approved-orders'),
+                    shipped: document.getElementById('shipped-orders'),
+                    delivered: document.getElementById('delivered-orders')
+                };
+                Object.values(containers).forEach(container => container.innerHTML = '');
+    
+                orders.forEach(order => {
+                    const status = getOrderStatus(order);
+                    const address = order.address ? `${order.address.line1}${order.address.line2 ? ', ' + order.address.line2 : ''}, ${order.address.city}, ${order.address.state}, ${order.address.postalCode}, ${order.address.country}` : 'N/A';
+                    const isReleased = order.status === 'released';
+                    const isShipped = order.status === 'shipped';
+                    const isDelivered = order.status === 'delivered';
+                    const orderDiv = document.createElement('div');
+                    orderDiv.className = 'order-item flex flex-col sm:flex-row items-start sm:items-center gap-4';
+                    orderDiv.innerHTML = `
+                        <img src="${order.items[0]?.image || 'https://via.placeholder.com/120x75'}" alt="${order.items[0]?.name || 'Car'}" class="order-image">
+                        <div class="flex-1">
+                            <p class="text-gray-700"><strong>Order ID:</strong> ${order.id}</p>
+                            <p class="text-gray-700"><strong>Customer:</strong> ${order.customer}</p>
+                            <p class="text-gray-700"><strong>Items:</strong> ${order.items.map(item => `${item.name} (${item.color})`).join(', ')}</p>
+                            <p class="text-gray-700"><strong>Total:</strong> ₱${order.total.toLocaleString()}</p>
+                            <p class="text-gray-700"><strong>Date:</strong> ${new Date(order.date).toLocaleDateString()}</p>
+                            <p class="text-gray-700"><strong>Address:</strong> ${address}</p>
+                            <p class="text-gray-700"><strong>Payment Type:</strong> ${order.paymentType}</p>
+                            ${order.paymentType === 'loan' ? `
+                                <p class="text-gray-700"><strong>Down Payment:</strong> ₱${order.downPayment.toLocaleString()}</p>
+                                <p class="text-gray-700"><strong>Remaining Balance:</strong> ₱${order.remainingBalance.toLocaleString()}</p>
+                            ` : ''}
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="approve-btn px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 ${isReleased || isShipped || isDelivered ? 'opacity-50 cursor-not-allowed' : ''}" data-order-id="${order.id}" ${isReleased || isShipped || isDelivered ? 'disabled' : ''}>
+                                ${isReleased || isShipped || isDelivered ? 'Approved' : 'Approve'}
+                            </button>
+                            <button class="ship-btn px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 ${!isReleased || isShipped || isDelivered ? 'opacity-50 cursor-not-allowed' : ''}" data-order-id="${order.id}" ${!isReleased || isShipped || isDelivered ? 'disabled' : ''}>
+                                ${isShipped || isDelivered ? 'Shipped' : 'Release for Shipping'}
+                            </button>
+                            <button class="deliver-btn px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600 ${!isShipped || isDelivered ? 'opacity-50 cursor-not-allowed' : ''}" data-order-id="${order.id}" ${!isShipped || isDelivered ? 'disabled' : ''}>
+                                ${isDelivered ? 'Delivered' : 'Mark as Delivered'}
+                            </button>
+                            <button class="delete-btn px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600" data-order-id="${order.id}">Delete</button>
+                        </div>
+                    `;
+                    containers[status].appendChild(orderDiv);
+                });
+            }
+    
+            let salesChart;
+            function updateSalesChart() {
+                const salesData = {};
+                orders.forEach(order => {
+                    const month = new Date(order.date).toLocaleString('default', { month: 'short' });
+                    salesData[month] = (salesData[month] || 0) + order.total;
+                });
+    
+                const data = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => salesData[m] || 0);
+    
+                if (salesChart) {
+                    salesChart.data.datasets[0].data = data;
+                    salesChart.update();
+                } else {
+                    salesChart = new Chart(document.getElementById('salesChart'), {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                            datasets: [{ label: 'Sales (₱)', data: data, borderColor: '#ef4444', fill: false }]
+                        },
+                        options: { scales: { y: { beginAtZero: true } } }
+                    });
+                }
+            }
+    
+            function checkForNewOrders() {
+                const pendingOrder = JSON.parse(localStorage.getItem('pendingOrder'));
+                if (pendingOrder) {
+                    const newOrder = {
+                        id: orders.length ? Math.max(...orders.map(o => o.id)) + 1 : 1,
+                        ...pendingOrder
+                    };
+                    orders.push(newOrder);
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                    localStorage.removeItem('pendingOrder');
+                    renderOrders();
+                    updateDashboard();
+                    updateSalesChart();
+                }
+            }
+    
+            document.getElementById('orders').addEventListener('click', (e) => {
+                const orderId = parseInt(e.target.getAttribute('data-order-id'));
+                if (e.target.classList.contains('approve-btn') && !e.target.disabled) {
+                    const order = orders.find(o => o.id === orderId);
+                    order.status = 'released';
+                    order.releaseDate = new Date().toISOString();
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                    renderOrders();
+                }
+                if (e.target.classList.contains('ship-btn') && !e.target.disabled) {
+                    const order = orders.find(o => o.id === orderId);
+                    order.status = 'shipped';
+                    order.shipDate = new Date().toISOString();
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                    renderOrders();
+                }
+                if (e.target.classList.contains('deliver-btn') && !e.target.disabled) {
+                    const order = orders.find(o => o.id === orderId);
+                    order.status = 'delivered';
+                    order.deliverDate = new Date().toISOString();
+                    order.items.forEach(item => {
+                        const car = carListings.find(c => c.name === item.name);
+                        if (car && car.stock > 0) car.stock -= 1;
+                    });
+                    localStorage.setItem('orders', JSON.stringify(orders));
+                    localStorage.setItem('carListings', JSON.stringify(carListings));
+                    renderOrders();
+                    updateDashboard();
+                    updateSalesChart();
+                    alert(`Order #${orderId} marked as delivered.`);
+                }
+                if (e.target.classList.contains('delete-btn')) {
+                    if (confirm(`Delete Order ID: ${orderId}?`)) {
+                        orders = orders.filter(o => o.id !== orderId);
+                        localStorage.setItem('orders', JSON.stringify(orders));
+                        renderOrders();
+                        updateDashboard();
+                        updateSalesChart();
+                    }
+                }
+            });
+    
             const dropzone = document.getElementById('dropzone');
             const carImageInput = document.getElementById('car-image');
             const imagePreview = document.getElementById('image-preview');
-
+    
             dropzone.addEventListener('click', () => carImageInput.click());
-            dropzone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropzone.classList.add('dragover');
-            });
+            dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
             dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
             dropzone.addEventListener('drop', (e) => {
                 e.preventDefault();
@@ -334,7 +478,7 @@
             carImageInput.addEventListener('change', () => {
                 if (carImageInput.files.length > 0) previewImage(carImageInput.files[0]);
             });
-
+    
             function previewImage(file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -344,8 +488,7 @@
                 };
                 reader.readAsDataURL(file);
             }
-
-            // Color Picker
+    
             const colorPicker = new iro.ColorPicker('#color-picker-container', {
                 width: 200,
                 color: '#ff0000',
@@ -354,13 +497,11 @@
             colorPicker.on('color:change', (color) => {
                 document.getElementById('car-color').value = color.hexString;
             });
-
-            // Additional Colors
+    
             const additionalColorsContainer = document.getElementById('additional-colors');
             const addMoreColorBtn = document.getElementById('add-more-color');
             let colorCounter = 0;
-            const colorPickers = [];
-
+    
             addMoreColorBtn.addEventListener('click', () => {
                 colorCounter++;
                 const colorDiv = document.createElement('div');
@@ -387,7 +528,7 @@
                     </div>
                 `;
                 additionalColorsContainer.appendChild(colorDiv);
-
+    
                 const newColorPicker = new iro.ColorPicker(`#color-picker-${colorCounter}`, {
                     width: 200,
                     color: '#ff0000',
@@ -396,17 +537,13 @@
                 newColorPicker.on('color:change', (color) => {
                     document.getElementById(`additional-color-${colorCounter}`).value = color.hexString;
                 });
-                colorPickers.push({ id: colorCounter, picker: newColorPicker });
-
+    
                 const additionalDropzone = document.getElementById(`dropzone-${colorCounter}`);
                 const additionalImageInput = document.getElementById(`additional-image-${colorCounter}`);
                 const additionalImagePreview = document.getElementById(`image-preview-${colorCounter}`);
-
+    
                 additionalDropzone.addEventListener('click', () => additionalImageInput.click());
-                additionalDropzone.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    additionalDropzone.classList.add('dragover');
-                });
+                additionalDropzone.addEventListener('dragover', (e) => { e.preventDefault(); additionalDropzone.classList.add('dragover'); });
                 additionalDropzone.addEventListener('dragleave', () => additionalDropzone.classList.remove('dragover'));
                 additionalDropzone.addEventListener('drop', (e) => {
                     e.preventDefault();
@@ -414,32 +551,28 @@
                     const files = e.dataTransfer.files;
                     if (files.length > 0) {
                         additionalImageInput.files = files;
-                        previewAdditionalImage(files[0], additionalImagePreview);
+                        previewImage(files[0], additionalImagePreview);
                     }
                 });
                 additionalImageInput.addEventListener('change', () => {
-                    if (additionalImageInput.files.length > 0) {
-                        previewAdditionalImage(additionalImageInput.files[0], additionalImagePreview);
-                    }
+                    if (additionalImageInput.files.length > 0) previewImage(additionalImageInput.files[0], additionalImagePreview);
                 });
-
+    
                 colorDiv.querySelector('.remove-color-btn').addEventListener('click', () => {
                     additionalColorsContainer.removeChild(colorDiv);
-                    colorPickers.splice(colorPickers.findIndex((cp) => cp.id === colorCounter), 1);
                 });
+    
+                function previewImage(file, previewElement) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewElement.src = e.target.result;
+                        previewElement.classList.remove('hidden');
+                        previewElement.parentElement.querySelector('p').classList.add('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
             });
-
-            function previewAdditionalImage(file, previewElement) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewElement.src = e.target.result;
-                    previewElement.classList.remove('hidden');
-                    previewElement.parentElement.querySelector('p').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-
-            // Add New Listing with Vercel Blob
+    
             document.getElementById('add-listing-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const carImageFile = carImageInput.files[0];
@@ -447,34 +580,7 @@
                     alert('Please upload a default image.');
                     return;
                 }
-
-                const carName = document.getElementById('car-name').value;
-
-                // Use Data URL as fallback if upload fails
-                let defaultImageUrl = imagePreview.src || '/assets/placeholder.png';
-
-                // Attempt to upload default image
-                const defaultFormData = new FormData();
-                defaultFormData.append('image', carImageFile);
-                defaultFormData.append('name', carName);
-
-                try {
-                    const defaultResponse = await fetch('/api/upload-image', {
-                        method: 'POST',
-                        body: defaultFormData,
-                    });
-                    const defaultData = await defaultResponse.json();
-                    if (defaultData.url) {
-                        defaultImageUrl = defaultData.url;
-                    } else {
-                        console.warn('Default image upload failed, using Data URL:', defaultData);
-                    }
-                } catch (error) {
-                    console.error('Error uploading default image:', error);
-                    alert('Failed to upload default image, using local preview instead.');
-                }
-
-                // Upload additional colors
+    
                 const additionalColors = [];
                 const additionalColorDivs = additionalColorsContainer.querySelectorAll('.additional-color');
                 for (let i = 0; i < additionalColorDivs.length; i++) {
@@ -482,83 +588,55 @@
                     const colorValue = document.getElementById(`additional-color-${colorId}`).value;
                     const colorName = document.getElementById(`additional-color-name-${colorId}`).value;
                     const imageInput = document.getElementById(`additional-image-${colorId}`);
-                    const imagePreviewElement = document.getElementById(`image-preview-${colorId}`);
-
                     if (!imageInput.files[0] || !colorName) {
-                        alert(`Please provide an image and name for Color ${parseInt(colorId) + 1}.`);
+                        alert(`Provide image and name for Color ${parseInt(colorId) + 1}.`);
                         return;
                     }
-
-                    let additionalImageUrl = imagePreviewElement.src || '/assets/placeholder.png';
-                    const additionalFormData = new FormData();
-                    additionalFormData.append('image', imageInput.files[0]);
-                    additionalFormData.append('name', `${carName}-color-${colorId}`);
-
-                    try {
-                        const additionalResponse = await fetch('/api/upload-image', {
-                            method: 'POST',
-                            body: additionalFormData,
-                        });
-                        const additionalData = await additionalResponse.json();
-                        if (additionalData.url) {
-                            additionalImageUrl = additionalData.url;
-                        } else {
-                            console.warn(`Additional image upload failed for Color ${colorId}, using Data URL:`, additionalData);
-                        }
-                    } catch (error) {
-                        console.error(`Error uploading image for Color ${colorId}:`, error);
-                        alert(`Failed to upload image for Color ${parseInt(colorId) + 1}, using local preview instead.`);
-                    }
-
-                    additionalColors.push({
-                        name: colorName,
-                        image: additionalImageUrl,
-                        bg: colorValue,
+                    const imageDataUrl = await new Promise(resolve => {
+                        const reader = new FileReader();
+                        reader.onload = (event) => resolve(event.target.result);
+                        reader.readAsDataURL(imageInput.files[0]);
                     });
+                    additionalColors.push({ name: colorName, image: imageDataUrl, bg: colorValue });
                 }
-
+    
                 const defaultColor = document.getElementById('car-color').value;
                 const defaultColorName = document.getElementById('car-color-name').value;
                 if (!defaultColorName) {
-                    alert('Please provide a name for the default color.');
+                    alert('Provide a name for the default color.');
                     return;
                 }
-
-                const newListing = {
-                    name: carName,
-                    price: parseInt(document.getElementById('car-price').value),
-                    category: document.getElementById('car-category').value,
-                    mileage: parseInt(document.getElementById('car-mileage').value),
-                    engine: parseInt(document.getElementById('car-engine').value),
-                    transmission: document.getElementById('car-transmission').value,
-                    image: defaultImageUrl,
-                    color: defaultColorName,
-                    stock: parseInt(document.getElementById('car-stock').value),
-                    colors: [{ name: defaultColorName, image: defaultImageUrl, bg: defaultColor }, ...additionalColors],
+    
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const newListing = {
+                        name: document.getElementById('car-name').value,
+                        price: parseInt(document.getElementById('car-price').value),
+                        category: document.getElementById('car-category').value,
+                        mileage: parseInt(document.getElementById('car-mileage').value),
+                        engine: parseInt(document.getElementById('car-engine').value),
+                        transmission: document.getElementById('car-transmission').value,
+                        image: event.target.result,
+                        color: defaultColorName,
+                        stock: parseInt(document.getElementById('car-stock').value),
+                        colors: [{ name: defaultColorName, image: event.target.result, bg: defaultColor }, ...additionalColors]
+                    };
+                    carListings.push(newListing);
+                    localStorage.setItem('carListings', JSON.stringify(carListings));
+                    e.target.reset();
+                    imagePreview.classList.add('hidden');
+                    dropzone.querySelector('p').classList.remove('hidden');
+                    colorPicker.color.hexString = '#ff0000';
+                    additionalColorsContainer.innerHTML = '';
+                    colorCounter = 0;
+                    displayCarListings();
                 };
-
-                carListings.push(newListing);
-                localStorage.setItem('carListings', JSON.stringify(carListings));
-                alert('Car listing added successfully!');
-                e.target.reset();
-                imagePreview.classList.add('hidden');
-                dropzone.querySelector('p').classList.remove('hidden');
-                colorPicker.color.hexString = '#ff0000';
-                additionalColorsContainer.innerHTML = '';
-                colorCounter = 0;
-                displayCarListings();
+                reader.readAsDataURL(carImageFile);
             });
-
-            // Display Car Listings
+    
             function displayCarListings() {
                 const carListingsContainer = document.getElementById('car-listings');
                 carListingsContainer.innerHTML = '';
-
-                if (carListings.length === 0) {
-                    carListingsContainer.innerHTML = '<p class="text-gray-600">No car listings available.</p>';
-                    return;
-                }
-
                 carListings.forEach((car, index) => {
                     const carDiv = document.createElement('div');
                     carDiv.className = 'car-listing-item';
@@ -585,12 +663,11 @@
                     carListingsContainer.appendChild(carDiv);
                 });
             }
-
-            // Handle Stock and Delete
+    
             document.getElementById('car-listings').addEventListener('click', (e) => {
                 const index = parseInt(e.target.getAttribute('data-index'));
                 if (e.target.classList.contains('delete-car-btn')) {
-                    if (confirm(`Are you sure you want to delete "${carListings[index].name}"?`)) {
+                    if (confirm(`Delete "${carListings[index].name}"?`)) {
                         carListings.splice(index, 1);
                         localStorage.setItem('carListings', JSON.stringify(carListings));
                         displayCarListings();
@@ -607,11 +684,12 @@
                     displayCarListings();
                 }
             });
-
-            // Initial Display
+    
             displayCarListings();
-
-            // Other sections (orders, analytics, concerns) omitted for brevity...
+            updateDashboard();
+            renderOrders();
+            updateSalesChart();
+            setInterval(checkForNewOrders, 5000);
         });
     </script>
 </body>

@@ -9,97 +9,23 @@
     <link rel="icon" type="image/x-icon" href="/assets/logo.png">
     <link rel="apple-touch-icon" href="/assets/logo.png">
     <meta name="msapplication-TileImage" content="/assets/logo.png">
-    <!-- Include EmailJS Library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
         (function() {
-            // Initialize EmailJS with your User ID
-            emailjs.init('bLjJhBMGRVcrMMCZH'); // Correct EmailJS User ID (Public Key)
+            emailjs.init('bLjJhBMGRVcrMMCZH');
         })();
     </script>
     <style>
-        .fade {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-        .cart-icon {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #ef4444; /* Red-500 */
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 30;
-        }
-        .cart-count {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #1f2937; /* Gray-800 */
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 12px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 50;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 40px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .otp-modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .close {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-        }
-        .car-image {
-            width: 100px;
-            height: 60px;
-            object-fit: contain;
-        }
+        .fade { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        .cart-icon { position: fixed; bottom: 20px; right: 20px; background-color: #ef4444; color: white; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 30; }
+        .cart-count { position: absolute; top: -10px; right: -10px; background-color: #1f2937; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; }
+        .modal { display: none; position: fixed; z-index: 50; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
+        .modal-content { background-color: white; margin: 5% auto; padding: 40px; border-radius: 10px; width: 90%; max-width: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .otp-modal-content { background-color: white; margin: 15% auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center; }
+        .close { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover, .close:focus { color: black; text-decoration: none; }
+        .car-image { width: 100px; height: 60px; object-fit: contain; }
     </style>
 </head>
 <body class="font-sans bg-gray-100">
@@ -133,9 +59,7 @@
             <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Checkout</h2>
             <div class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
                 <h3 class="text-xl font-semibold text-gray-700 mb-4">Order Summary</h3>
-                <ul id="order-summary" class="space-y-2 mb-4">
-                    <!-- Order summary will be populated dynamically -->
-                </ul>
+                <ul id="order-summary" class="space-y-2 mb-4"></ul>
                 <p class="text-lg font-semibold text-gray-700">Total: <span id="order-total" class="text-red-500">₱0</span></p>
                 <p id="down-payment" class="text-lg font-semibold text-gray-700 hidden">Down Payment (25%): <span id="down-payment-amount" class="text-red-500">₱0</span></p>
                 <p id="remaining-balance" class="text-lg font-semibold text-gray-700 hidden">Remaining Balance: <span id="remaining-balance-amount" class="text-red-500">₱0</span></p>
@@ -162,7 +86,6 @@
                         <label for="customer-email" class="block text-gray-700">Email</label>
                         <input type="email" id="customer-email" class="w-full px-4 py-2 border rounded-lg" required>
                     </div>
-                    <!-- Address Fields -->
                     <div class="mb-4">
                         <label for="address-line1" class="block text-gray-700">Address Line 1</label>
                         <input type="text" id="address-line1" class="w-full px-4 py-2 border rounded-lg" placeholder="Street address" required>
@@ -187,7 +110,6 @@
                         <label for="country" class="block text-gray-700">Country</label>
                         <input type="text" id="country" class="w-full px-4 py-2 border rounded-lg" value="Philippines" required>
                     </div>
-                    <!-- Payment Method Selection -->
                     <div class="space-y-4">
                         <h3 class="text-xl font-semibold text-gray-700 mb-2">Select Payment Method</h3>
                         <div class="flex justify-around">
@@ -205,9 +127,7 @@
                             </label>
                         </div>
                     </div>
-                    <!-- Payment Details -->
                     <div id="payment-details" class="space-y-4 hidden">
-                        <!-- BDO/BPI Fields -->
                         <div id="card-details" class="space-y-4 hidden">
                             <div>
                                 <label for="card-number" class="block text-left text-gray-700 font-semibold mb-1">Card Number</label>
@@ -224,7 +144,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- GCash Field -->
                         <div id="gcash-details" class="space-y-4 hidden">
                             <div>
                                 <label for="gcash-number" class="block text-left text-gray-700 font-semibold mb-1">Phone Number</label>
@@ -264,43 +183,28 @@
     </div>
 
     <script>
-        // Increment pageviews on page load
         document.addEventListener('DOMContentLoaded', () => {
-            let analytics = JSON.parse(localStorage.getItem('analytics')) || {
-                pageviews: 0,
-                satisfaction: 0,
-                traffic: { organic: 0, referral: 0, other: 0 },
-                browsers: { chrome: 0, firefox: 0, explorer: 0, safari: 0 }
-            };
-            analytics.pageviews = (analytics.pageviews || 0) + 1;
+            let analytics = JSON.parse(localStorage.getItem('analytics')) || { pageviews: 0, satisfaction: 0, traffic: { organic: 0, referral: 0, other: 0 }, browsers: { chrome: 0, firefox: 0, explorer: 0, safari: 0 } };
+            analytics.pageviews += 1;
             localStorage.setItem('analytics', JSON.stringify(analytics));
-        });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Load Cart and Car Listings
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let carListings = JSON.parse(localStorage.getItem('carListings')) || [];
 
-            // Update Cart Count
             const cartCountElement = document.getElementById('cart-count');
             cartCountElement.textContent = cart.length;
 
-            // Populate Order Summary
             const orderSummary = document.getElementById('order-summary');
             let total = 0;
             cart.forEach(item => {
                 const li = document.createElement('li');
                 li.className = 'flex justify-between';
-                li.innerHTML = `
-                    <span>${item.name} (${item.color})</span>
-                    <span>₱${item.price.toLocaleString()} + ₱${item.shippingFee.toLocaleString()} (Shipping) + ₱${item.tax.toLocaleString()} (Tax)</span>
-                `;
+                li.innerHTML = `<span>${item.name} (${item.color})</span><span>₱${item.price.toLocaleString()} + ₱${item.shippingFee.toLocaleString()} (Shipping) + ₱${item.tax.toLocaleString()} (Tax)</span>`;
                 orderSummary.appendChild(li);
                 total += item.price + item.shippingFee + item.tax;
             });
             document.getElementById('order-total').textContent = `₱${total.toLocaleString()}`;
 
-            // Payment Type Selection
             const paymentTypes = document.querySelectorAll('input[name="payment-type"]');
             const downPaymentElement = document.getElementById('down-payment');
             const downPaymentAmountElement = document.getElementById('down-payment-amount');
@@ -312,7 +216,7 @@
                     if (type.value === 'loan') {
                         downPaymentElement.classList.remove('hidden');
                         remainingBalanceElement.classList.remove('hidden');
-                        const downPayment = total * 0.25; // 25% down payment
+                        const downPayment = total * 0.25;
                         const remainingBalance = total - downPayment;
                         downPaymentAmountElement.textContent = `₱${downPayment.toLocaleString()}`;
                         remainingBalanceAmountElement.textContent = `₱${remainingBalance.toLocaleString()}`;
@@ -323,7 +227,6 @@
                 });
             });
 
-            // Payment Method Selection
             const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
             const paymentDetails = document.getElementById('payment-details');
             const cardDetails = document.getElementById('card-details');
@@ -335,30 +238,25 @@
                     if (method.value === 'gcash') {
                         gcashDetails.classList.remove('hidden');
                         cardDetails.classList.add('hidden');
-                        // Remove required attribute from card fields
                         document.getElementById('card-number').removeAttribute('required');
                         document.getElementById('expiry').removeAttribute('required');
                         document.getElementById('cvv').removeAttribute('required');
-                        // Add required attribute to GCash field
                         document.getElementById('gcash-number').setAttribute('required', 'true');
                     } else {
                         gcashDetails.classList.add('hidden');
                         cardDetails.classList.remove('hidden');
-                        // Add required attribute to card fields
                         document.getElementById('card-number').setAttribute('required', 'true');
                         document.getElementById('expiry').setAttribute('required', 'true');
                         document.getElementById('cvv').setAttribute('required', 'true');
-                        // Remove required attribute from GCash field
                         document.getElementById('gcash-number').removeAttribute('required');
                     }
                 });
             });
 
-            // Handle Card Number Input (Add space after every 4 digits)
             const cardNumberInput = document.getElementById('card-number');
             cardNumberInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-                value = value.slice(0, 16); // Limit to 16 digits
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.slice(0, 16);
                 let formattedValue = '';
                 for (let i = 0; i < value.length; i += 4) {
                     if (i > 0) formattedValue += ' ';
@@ -367,97 +265,62 @@
                 e.target.value = formattedValue;
             });
 
-            // Handle Expiry Date Input (MM/YY)
             const expiryInput = document.getElementById('expiry');
             expiryInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-                if (value.length > 2) {
-                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
-                }
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 2) value = value.slice(0, 2) + '/' + value.slice(2, 4);
                 e.target.value = value;
             });
 
-            // Handle CVV Input (Limit to 3 digits)
             const cvvInput = document.getElementById('cvv');
             cvvInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-                value = value.slice(0, 3); // Limit to 3 digits
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.slice(0, 3);
                 e.target.value = value;
             });
 
-            // Handle GCash Number Input (Format as 1234 567 8901)
             const gcashNumberInput = document.getElementById('gcash-number');
             gcashNumberInput.addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
-                value = value.slice(0, 11); // Limit to 11 digits
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.slice(0, 11);
                 let formattedValue = '';
-                if (value.length > 7) {
-                    formattedValue = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7, 11);
-                } else if (value.length > 4) {
-                    formattedValue = value.slice(0, 4) + ' ' + value.slice(4, 7);
-                } else {
-                    formattedValue = value;
-                }
+                if (value.length > 7) formattedValue = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7, 11);
+                else if (value.length > 4) formattedValue = value.slice(0, 4) + ' ' + value.slice(4, 7);
+                else formattedValue = value;
                 e.target.value = formattedValue;
             });
 
-            // Validate Expiry Date
             function isCardExpired(expiry) {
                 const [month, year] = expiry.split('/').map(Number);
-                const expiryYear = 2000 + year; // Convert YY to YYYY (e.g., 25 to 2025)
-                const currentDate = new Date('2025-03-27'); // Current date as per system
+                const expiryYear = 2000 + year;
+                const currentDate = new Date('2025-03-27');
                 const currentYear = currentDate.getFullYear();
-                const currentMonth = currentDate.getMonth() + 1; // getMonth() is 0-based, so add 1
-
-                // Check if the year is before the current year
-                if (expiryYear < currentYear) {
-                    return true;
-                }
-                // If the year is the same as the current year, check the month
-                if (expiryYear === currentYear && month < currentMonth) {
-                    return true;
-                }
-                return false;
+                const currentMonth = currentDate.getMonth() + 1;
+                return (expiryYear < currentYear) || (expiryYear === currentYear && month < currentMonth);
             }
 
-            // Generate OTP
             function generateOTP() {
-                return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+                return Math.floor(100000 + Math.random() * 900000).toString();
             }
 
-            // Calculate OTP Expiration Time (10 minutes from now)
             function getExpirationTime() {
                 const now = new Date();
-                const expiration = new Date(now.getTime() + 10 * 60 * 1000); // Add 10 minutes
-                return expiration.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format as HH:MM AM/PM
+                const expiration = new Date(now.getTime() + 10 * 60 * 1000);
+                return expiration.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }
 
-            // Send OTP via Email using EmailJS
             async function sendOTP(email, otp) {
                 try {
                     const expirationTime = getExpirationTime();
-                    const templateParams = {
-                        email: email, // The customer's email
-                        otp: otp, // The OTP to include in the email
-                        time: expirationTime // The expiration time (e.g., "10:15 AM")
-                    };
-
-                    const response = await emailjs.send(
-                        'service_q9jao4h', // Your EmailJS Service ID
-                        'template_1q0pbli', // Your EmailJS Template ID
-                        templateParams
-                    );
-
+                    const templateParams = { email: email, otp: otp, time: expirationTime };
+                    await emailjs.send('service_q9jao4h', 'template_1q0pbli', templateParams);
                     return true;
                 } catch (error) {
-                    alert('Failed to send OTP. Please try again. (Error: ' + error.text + ')');
-                    // For demo purposes, show the OTP in an alert if sending fails
-                    alert(`[DEMO] Since the email sending might have failed, here's the OTP: ${otp}`);
-                    return true; // Proceed to OTP modal even if email fails (for demo)
+                    alert('Failed to send OTP. For demo: OTP is ' + otp);
+                    return true;
                 }
             }
 
-            // Handle Payment Form Submission
             const paymentForm = document.getElementById('payment-form');
             const otpModal = document.getElementById('otp-modal');
             const congratsModal = document.getElementById('congrats-modal');
@@ -468,10 +331,8 @@
 
             paymentForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-
-                // Check if cart is empty or total is 0
                 if (cart.length === 0 || total === 0) {
-                    alert('Your cart is empty or the total is 0. Please add items to your cart before proceeding.');
+                    alert('Your cart is empty or total is 0.');
                     return;
                 }
 
@@ -490,114 +351,75 @@
                 const downPayment = paymentType === 'loan' ? total * 0.25 : 0;
                 const remainingBalance = paymentType === 'loan' ? total - downPayment : 0;
 
-                // Validate expiry date if payment method is BDO or BPI
-                if (paymentMethod !== 'gcash') {
-                    const expiry = document.getElementById('expiry').value;
-                    if (isCardExpired(expiry)) {
-                        alert('Your card has expired. Please use a card with an expiry date of March 2025 or later.');
-                        return;
-                    }
+                if (paymentMethod !== 'gcash' && isCardExpired(document.getElementById('expiry').value)) {
+                    alert('Your card has expired.');
+                    return;
                 }
 
-                // Prepare order data
                 orderData = {
-                    id: (JSON.parse(localStorage.getItem('orders')) || []).length + 1,
                     customer: customerName,
                     email: customerEmail,
                     address: address,
-                    items: cart,
+                    items: cart.map(item => ({
+                        name: item.name,
+                        price: item.price,
+                        image: item.image,
+                        color: item.color,
+                        shippingFee: item.shippingFee,
+                        tax: item.tax
+                    })),
                     total: total,
                     downPayment: downPayment,
                     remainingBalance: remainingBalance,
                     paymentType: paymentType,
                     date: new Date().toISOString(),
                     paymentMethod: paymentMethod,
-                    status: 'pending' // Initial status
+                    status: 'pending'
                 };
 
-                // Generate OTP
                 generatedOTP = generateOTP();
-
-                // Send OTP to email using EmailJS
                 const otpSent = await sendOTP(customerEmail, generatedOTP);
-                if (otpSent) {
-                    // Show OTP Modal
-                    otpModal.style.display = 'block';
-                }
+                if (otpSent) otpModal.style.display = 'block';
             });
 
-            // Handle OTP Verification
             const otpForm = document.getElementById('otp-form');
             otpForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const enteredOTP = document.getElementById('otp-input').value;
 
                 if (enteredOTP === generatedOTP) {
-                    // OTP verified, proceed with order
-                    let orders = JSON.parse(localStorage.getItem('orders')) || [];
-                    orders.push(orderData);
-                    localStorage.setItem('orders', JSON.stringify(orders));
-
-                    // Update stock in carListings
-                    cart.forEach(item => {
-                        const car = carListings.find(c => c.name === item.name);
-                        if (car && car.stock > 0) {
-                            car.stock -= 1;
-                        }
-                    });
-                    localStorage.setItem('carListings', JSON.stringify(carListings));
-
-                    // Show Congratulatory Modal with Images
+                    localStorage.setItem('pendingOrder', JSON.stringify(orderData));
                     purchasedCars.innerHTML = '';
                     cart.forEach(car => {
-                        if (car.image) {
-                            const img = document.createElement('img');
-                            img.src = car.image;
-                            img.alt = car.name;
-                            img.classList.add('w-40', 'h-auto', 'rounded-lg');
-                            // Add error handling for image loading
-                            img.onerror = () => {
-                                console.error(`Failed to load image for ${car.name}: ${car.image}`);
-                                img.src = '/assets/placeholder.jpg'; // Fallback image if the original fails
-                            };
-                            purchasedCars.appendChild(img);
-                        } else {
-                            console.warn(`No image found for ${car.name}`);
-                            const placeholder = document.createElement('div');
-                            placeholder.classList.add('w-40', 'h-40', 'bg-gray-200', 'rounded-lg', 'flex', 'items-center', 'justify-center', 'text-gray-500');
-                            placeholder.textContent = 'No Image';
-                            purchasedCars.appendChild(placeholder);
-                        }
+                        const img = document.createElement('img');
+                        img.src = car.image || '/assets/placeholder.jpg';
+                        img.alt = car.name;
+                        img.classList.add('w-40', 'h-auto', 'rounded-lg');
+                        img.onerror = () => img.src = '/assets/placeholder.jpg';
+                        purchasedCars.appendChild(img);
                     });
                     otpModal.style.display = 'none';
                     congratsModal.style.display = 'block';
-
-                    // Clear Cart
                     cart = [];
                     localStorage.setItem('cart', JSON.stringify(cart));
                     cartCountElement.textContent = cart.length;
                 } else {
-                    alert('Invalid OTP. Please try again.');
+                    alert('Invalid OTP.');
                 }
             });
 
-            // Close Modals
             closeModal.forEach(closeBtn => {
                 closeBtn.addEventListener('click', () => {
                     otpModal.style.display = 'none';
                     congratsModal.style.display = 'none';
-                    // Redirect to Order Tracking after closing congratulatory modal
                     if (closeBtn.parentElement.parentElement.id === 'congrats-modal') {
                         window.location.href = '/order-tracking';
                     }
                 });
             });
 
-            // Close Modals When Clicking Outside
             window.addEventListener('click', (e) => {
-                if (e.target === otpModal) {
-                    otpModal.style.display = 'none';
-                }
+                if (e.target === otpModal) otpModal.style.display = 'none';
                 if (e.target === congratsModal) {
                     congratsModal.style.display = 'none';
                     window.location.href = '/order-tracking';
