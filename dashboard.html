@@ -384,7 +384,7 @@
                     salesData[month] = (salesData[month] || 0) + order.total;
                 });
     
-                const data = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => salesData[m] || 0);
+                const data = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', "Dec"].map(m => salesData[m] || 0);
     
                 if (salesChart) {
                     salesChart.data.datasets[0].data = data;
@@ -404,12 +404,11 @@
             function checkForNewOrders() {
                 const pendingOrder = JSON.parse(localStorage.getItem('pendingOrder'));
                 if (pendingOrder) {
-                    const newOrder = {
-                        id: orders.length ? Math.max(...orders.map(o => o.id)) + 1 : 1,
-                        ...pendingOrder
-                    };
-                    orders.push(newOrder);
-                    localStorage.setItem('orders', JSON.stringify(orders));
+                    const existingOrder = orders.find(o => o.id === pendingOrder.id);
+                    if (!existingOrder) {
+                        orders.push(pendingOrder);
+                        localStorage.setItem('orders', JSON.stringify(orders));
+                    }
                     localStorage.removeItem('pendingOrder');
                     renderOrders();
                     updateDashboard();
@@ -446,6 +445,7 @@
                     renderOrders();
                     updateDashboard();
                     updateSalesChart();
+                    alert(`Order #${orderId} marked as delivered.`);
                 }
                 if (e.target.classList.contains('delete-btn')) {
                     if (confirm(`Delete Order ID: ${orderId}?`)) {
