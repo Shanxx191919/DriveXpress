@@ -522,6 +522,7 @@
 
                 carListings.push(newListing);
                 localStorage.setItem('carListings', JSON.stringify(carListings));
+                alert('Car listing added successfully!');
                 e.target.reset();
                 imagePreview.classList.add('hidden');
                 dropzone.querySelector('p').classList.remove('hidden');
