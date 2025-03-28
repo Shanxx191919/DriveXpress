@@ -450,19 +450,28 @@
 
                 const carName = document.getElementById('car-name').value;
 
-                // Upload default image
+                // Use Data URL as fallback if upload fails
+                let defaultImageUrl = imagePreview.src || '/assets/placeholder.png';
+
+                // Attempt to upload default image
                 const defaultFormData = new FormData();
                 defaultFormData.append('image', carImageFile);
                 defaultFormData.append('name', carName);
 
-                const defaultResponse = await fetch('/api/upload-image', {
-                    method: 'POST',
-                    body: defaultFormData,
-                });
-                const defaultData = await defaultResponse.json();
-                if (!defaultData.url) {
-                    alert('Failed to upload default image.');
-                    return;
+                try {
+                    const defaultResponse = await fetch('/api/upload-image', {
+                        method: 'POST',
+                        body: defaultFormData,
+                    });
+                    const defaultData = await defaultResponse.json();
+                    if (defaultData.url) {
+                        defaultImageUrl = defaultData.url;
+                    } else {
+                        console.warn('Default image upload failed, using Data URL:', defaultData);
+                    }
+                } catch (error) {
+                    console.error('Error uploading default image:', error);
+                    alert('Failed to upload default image, using local preview instead.');
                 }
 
                 // Upload additional colors
@@ -473,29 +482,37 @@
                     const colorValue = document.getElementById(`additional-color-${colorId}`).value;
                     const colorName = document.getElementById(`additional-color-name-${colorId}`).value;
                     const imageInput = document.getElementById(`additional-image-${colorId}`);
+                    const imagePreviewElement = document.getElementById(`image-preview-${colorId}`);
 
                     if (!imageInput.files[0] || !colorName) {
                         alert(`Please provide an image and name for Color ${parseInt(colorId) + 1}.`);
                         return;
                     }
 
+                    let additionalImageUrl = imagePreviewElement.src || '/assets/placeholder.png';
                     const additionalFormData = new FormData();
                     additionalFormData.append('image', imageInput.files[0]);
                     additionalFormData.append('name', `${carName}-color-${colorId}`);
 
-                    const additionalResponse = await fetch('/api/upload-image', {
-                        method: 'POST',
-                        body: additionalFormData,
-                    });
-                    const additionalData = await additionalResponse.json();
-                    if (!additionalData.url) {
-                        alert(`Failed to upload image for Color ${parseInt(colorId) + 1}.`);
-                        return;
+                    try {
+                        const additionalResponse = await fetch('/api/upload-image', {
+                            method: 'POST',
+                            body: additionalFormData,
+                        });
+                        const additionalData = await additionalResponse.json();
+                        if (additionalData.url) {
+                            additionalImageUrl = additionalData.url;
+                        } else {
+                            console.warn(`Additional image upload failed for Color ${colorId}, using Data URL:`, additionalData);
+                        }
+                    } catch (error) {
+                        console.error(`Error uploading image for Color ${colorId}:`, error);
+                        alert(`Failed to upload image for Color ${parseInt(colorId) + 1}, using local preview instead.`);
                     }
 
                     additionalColors.push({
                         name: colorName,
-                        image: additionalData.url,
+                        image: additionalImageUrl,
                         bg: colorValue,
                     });
                 }
@@ -514,10 +531,10 @@
                     mileage: parseInt(document.getElementById('car-mileage').value),
                     engine: parseInt(document.getElementById('car-engine').value),
                     transmission: document.getElementById('car-transmission').value,
-                    image: defaultData.url,
+                    image: defaultImageUrl,
                     color: defaultColorName,
                     stock: parseInt(document.getElementById('car-stock').value),
-                    colors: [{ name: defaultColorName, image: defaultData.url, bg: defaultColor }, ...additionalColors],
+                    colors: [{ name: defaultColorName, image: defaultImageUrl, bg: defaultColor }, ...additionalColors],
                 };
 
                 carListings.push(newListing);
