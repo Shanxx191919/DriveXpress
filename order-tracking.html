@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveXpress | Order Tracking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+    <link rel="apple-touch-icon" href="/assets/logo.png">
+    <meta name="msapplication-TileImage" content="/assets/logo.png">
+    <style>
+        .fade { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        .tracking-card { background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); padding: 1.5rem; }
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before { content: ''; position: absolute; left: 0.75rem; top: 0; bottom: 0; width: 2px; background-color: #e5e7eb; }
+        .timeline-item { position: relative; margin-bottom: 1.5rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -2rem; top: 0.25rem; width: 1rem; height: 1rem; border-radius: 50%; background-color: #ef4444; border: 2px solid white; }
+        .timeline-item.completed::before { background-color: #10b981; }
+        .order-list-card { background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-top: 2rem; }
+        .order-item { display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #e5e7eb; cursor: pointer; transition: background-color 0.3s; }
+        .order-item:hover { background-color: #f3f4f6; }
+        .order-item img { 
+            width: 80px; 
+            height: 50px; 
+            object-fit: contain; 
+            margin-right: 1rem; 
+            border-radius: 4px; 
+        }
+        /* Placeholder for empty slots */
+        .order-item-placeholder { 
+            display: flex; 
+            align-items: center; 
+            padding: 1rem; 
+            border-bottom: 1px solid #e5e7eb; 
+            height: 90px; /* Match the height of an order-item for consistency */
+            opacity: 0.3; 
+        }
+        .order-item-placeholder img { 
+            width: 80px; 
+            height: 50px; 
+            margin-right: 1rem; 
+            border-radius: 4px; 
+            background-color: #e5e7eb; 
+        }
+        .order-item-placeholder div { 
+            flex: 1; 
+            height: 50px; 
+            background-color: #e5e7eb; 
+            border-radius: 4px; 
+        }
+        /* Carousel Styles */
+        .carousel-container { position: relative; overflow: hidden; width: 100%; }
+        .carousel { display: flex; transition: transform 0.5s ease-in-out; width: 100%; }
+        .carousel-item { flex: 0 0 100%; display: flex; flex-direction: column; gap: 1rem; }
+        .carousel-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; }
+        .carousel-controls button { 
+            padding: 0.5rem 1rem; 
+            background-color: #ef4444; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        .carousel-controls button:hover { background-color: #dc2626; }
+        .carousel-controls button:disabled { background-color: #d1d5db; cursor: not-allowed; }
+        .carousel-page-info { font-size: 0.875rem; color: #4b5563; }
+    </style>
+</head>
+<body class="font-sans bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-75 text-white z-20 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-red-500">DriveXpress</h1>
+            <ul class="flex space-x-6">
+                <li><a href="/home" class="hover:text-red-500">Home</a></li>
+                <li><a href="/view-cars" class="hover:text-red-500">Cars</a></li>
+                <li><a href="/about" class="hover:text-red-500">About</a></li>
+                <li><a href="/contact" class="hover:text-red-500">Contact</a></li>
+                <li><a href="/order-tracking" class="hover:text-red-500">Orders</a></li>
+                <li><a href="/cart" class="hover:text-red-500">Cart</a></li>
+                <li><a href="/dashboard" class="hover:text-red-500">Log In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Order Tracking Section -->
+    <section class="mt-16 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-gray-800 text-center mb-6">Track Your Order</h2>
+
+            <!-- Order ID Input Form -->
+            <div class="max-w-md mx-auto mb-8">
+                <form id="tracking-form" class="flex flex-col sm:flex-row gap-4">
+                    <input type="text" id="order-id" class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Enter your Order ID" required>
+                    <button type="submit" class="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600">Track Order</button>
+                </form>
+            </div>
+
+            <!-- Order Details (Hidden by Default) -->
+            <div id="order-details" class="hidden tracking-card max-w-2xl mx-auto">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Order #<span id="order-id-display"></span></h3>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700">Order Summary</h4>
+                        <ul id="order-items" class="list-disc list-inside text-gray-600"></ul>
+                        <p class="text-gray-600 mt-2">Total: <span id="order-total" class="font-semibold text-red-500"></span></p>
+                        <p class="text-gray-600">Order Date: <span id="order-date"></span></p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700">Agent Information</h4>
+                        <p class="text-gray-600">Assigned Agent: <span id="agent-name" class="font-semibold"></span></p>
+                        <p class="text-gray-600">Contact: <span id="agent-contact"></span></p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700">Shipping Information</h4>
+                        <p class="text-gray-600">Estimated Shipping Date: <span id="estimated-shipping" class="font-semibold"></span></p>
+                        <p class="text-gray-600">Shipping Address: <span id="shipping-address"></span></p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Order Status</h4>
+                        <div class="timeline">
+                            <div class="timeline-item completed">
+                                <p class="font-semibold">Order Placed</p>
+                                <p class="text-gray-600 text-sm" id="status-placed"></p>
+                            </div>
+                            <div class="timeline-item" id="status-processing">
+                                <p class="font-semibold">Processing</p>
+                                <p class="text-gray-600 text-sm" id="status-processing-text">Your order is being prepared.</p>
+                            </div>
+                            <div class="timeline-item" id="status-shipped">
+                                <p class="font-semibold">Shipped</p>
+                                <p class="text-gray-600 text-sm" id="status-shipped-text">Estimated: <span id="status-shipped-date"></span></p>
+                            </div>
+                            <div class="timeline-item" id="status-delivered">
+                                <p class="font-semibold">Delivered</p>
+                                <p class="text-gray-600 text-sm" id="status-delivered-text">Estimated: <span id="status-delivered-date"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Orders List with Carousel -->
+            <div id="all-orders" class="order-list-card max-w-2xl mx-auto">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">All Orders</h3>
+                <div id="orders-list" class="carousel-container">
+                    <div id="carousel" class="carousel"></div>
+                    <div class="carousel-controls">
+                        <button id="prev-btn">Previous</button>
+                        <span id="carousel-page-info" class="carousel-page-info"></span>
+                        <button id="next-btn">Next</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message (Hidden by Default) -->
+            <div id="error-message" class="hidden text-center text-red-500 max-w-md mx-auto">
+                <p>Order not found. Please check your Order ID and try again.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const agents = [
+                { name: 'John Doe', contact: 'john.doe@drivexpress.com' },
+                { name: 'Jane Smith', contact: 'jane.smith@drivexpress.com' },
+                { name: 'Michael Brown', contact: 'michael.brown@drivexpress.com' }
+            ];
+
+            function assignAgent() {
+                return agents[Math.floor(Math.random() * agents.length)];
+            }
+
+            function calculateEstimatedShippingDate(orderDate) {
+                const orderDateObj = new Date(orderDate);
+                const shippingDate = new Date(orderDateObj.getTime() + 5 * 24 * 60 * 60 * 1000);
+                return shippingDate.toLocaleDateString();
+            }
+
+            function calculateEstimatedDeliveryDate(orderDate) {
+                const orderDateObj = new Date(orderDate);
+                const deliveryDate = new Date(orderDateObj.getTime() + 7 * 24 * 60 * 60 * 1000);
+                return deliveryDate.toLocaleDateString();
+            }
+
+            function updateOrderStatus(order) {
+                const orderDateObj = new Date(order.date);
+                const currentDate = new Date();
+                const timeDiff = currentDate - orderDateObj;
+                const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+
+                const processingItem = document.getElementById('status-processing');
+                const processingText = document.getElementById('status-processing-text');
+                const shippedItem = document.getElementById('status-shipped');
+                const shippedText = document.getElementById('status-shipped-text');
+                const deliveredItem = document.getElementById('status-delivered');
+                const deliveredText = document.getElementById('status-delivered-text');
+
+                // Reset timeline items
+                processingItem.classList.remove('completed');
+                shippedItem.classList.remove('completed');
+                deliveredItem.classList.remove('completed');
+                processingText.textContent = 'Your order is being prepared.';
+                shippedText.textContent = `Estimated: ${calculateEstimatedShippingDate(order.date)}`;
+                deliveredText.textContent = `Estimated: ${calculateEstimatedDeliveryDate(order.date)}`;
+
+                if (order.status === 'released' && order.releaseDate) {
+                    processingItem.classList.add('completed');
+                    processingText.textContent = `Released on: ${new Date(order.releaseDate).toLocaleDateString()}`;
+                } else if (daysDiff >= 2) {
+                    processingItem.classList.add('completed');
+                    processingText.textContent = 'Your order has been processed.';
+                }
+
+                if (order.status === 'shipped' && order.shipDate) {
+                    processingItem.classList.add('completed');
+                    shippedItem.classList.add('completed');
+                    shippedText.textContent = `Shipped on: ${new Date(order.shipDate).toLocaleDateString()}`;
+                } else if (daysDiff >= 5) {
+                    processingItem.classList.add('completed');
+                    shippedItem.classList.add('completed');
+                    shippedText.textContent = `Shipped on: ${new Date(orderDateObj.getTime() + 5 * 24 * 60 * 60 * 1000).toLocaleDateString()}`;
+                }
+
+                if (order.status === 'delivered' && order.deliverDate) {
+                    processingItem.classList.add('completed');
+                    shippedItem.classList.add('completed');
+                    deliveredItem.classList.add('completed');
+                    deliveredText.textContent = `Delivered on: ${new Date(order.deliverDate).toLocaleDateString()}`;
+                } else if (daysDiff >= 7) {
+                    processingItem.classList.add('completed');
+                    shippedItem.classList.add('completed');
+                    deliveredItem.classList.add('completed');
+                    deliveredText.textContent = `Delivered on: ${new Date(orderDateObj.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}`;
+                }
+            }
+
+            function displayOrderDetails(order) {
+                const orderDetails = document.getElementById('order-details');
+                const errorMessage = document.getElementById('error-message');
+
+                // Reset UI
+                orderDetails.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+
+                if (order) {
+                    // Order found, display details
+                    orderDetails.classList.remove('hidden');
+
+                    // Populate Order Summary
+                    document.getElementById('order-id-display').textContent = order.id;
+                    const orderItems = document.getElementById('order-items');
+                    orderItems.innerHTML = '';
+                    order.items.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = `${item.name} (${item.color}) - ₱${item.price.toLocaleString()}`;
+                        orderItems.appendChild(li);
+                    });
+                    document.getElementById('order-total').textContent = `₱${order.total.toLocaleString()}`;
+                    document.getElementById('order-date').textContent = new Date(order.date).toLocaleDateString();
+
+                    // Populate Agent Information
+                    const agent = assignAgent();
+                    document.getElementById('agent-name').textContent = agent.name;
+                    document.getElementById('agent-contact').textContent = agent.contact;
+
+                    // Populate Shipping Information
+                    const estimatedShipping = calculateEstimatedShippingDate(order.date);
+                    document.getElementById('estimated-shipping').textContent = estimatedShipping;
+                    const address = order.address ? `${order.address.line1}${order.address.line2 ? ', ' + order.address.line2 : ''}, ${order.address.city}, ${order.address.state}, ${order.address.postalCode}, ${order.address.country}` : 'N/A';
+                    document.getElementById('shipping-address').textContent = address;
+
+                    // Populate Order Status Timeline
+                    document.getElementById('status-placed').textContent = `Placed on: ${new Date(order.date).toLocaleDateString()}`;
+                    document.getElementById('status-shipped-date').textContent = estimatedShipping;
+                    document.getElementById('status-delivered-date').textContent = calculateEstimatedDeliveryDate(order.date);
+                    updateOrderStatus(order);
+
+                    // Scroll to the order details section
+                    orderDetails.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    // Order not found, show error
+                    errorMessage.classList.remove('hidden');
+                }
+            }
+
+            function displayAllOrders() {
+                const orders = JSON.parse(localStorage.getItem('orders')) || [];
+                console.log('Fetched orders from localStorage:', orders); // Debug log
+
+                const carousel = document.getElementById('carousel');
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+                const pageInfo = document.getElementById('carousel-page-info');
+
+                if (!orders || orders.length === 0) {
+                    console.log('No orders found in localStorage.'); // Debug log
+                    carousel.innerHTML = '<p class="text-gray-600">No orders found.</p>';
+                    prevBtn.disabled = true;
+                    nextBtn.disabled = true;
+                    pageInfo.textContent = '';
+                    return;
+                }
+
+                // Number of orders to display per page
+                const ordersPerPage = 5;
+                const totalPages = Math.ceil(orders.length / ordersPerPage);
+                let currentPage = 0;
+
+                // Create all carousel items upfront
+                const carouselItems = [];
+                for (let i = 0; i < orders.length; i += ordersPerPage) {
+                    const pageOrders = orders.slice(i, i + ordersPerPage);
+                    const carouselItem = document.createElement('div');
+                    carouselItem.classList.add('carousel-item');
+
+                    // Add actual orders
+                    pageOrders.forEach(order => {
+                        console.log('Rendering order:', order); // Debug log
+                        if (!order.items || order.items.length === 0) {
+                            console.warn('Order has no items:', order); // Debug log
+                            return;
+                        }
+
+                        const orderDiv = document.createElement('div');
+                        orderDiv.classList.add('order-item');
+                        orderDiv.dataset.orderId = order.id;
+
+                        const firstItem = order.items[0];
+                        const img = document.createElement('img');
+                        img.src = firstItem.image || 'https://via.placeholder.com/80x50';
+                        img.alt = firstItem.name || 'Car Image';
+                        orderDiv.appendChild(img);
+
+                        const detailsDiv = document.createElement('div');
+                        detailsDiv.innerHTML = `
+                            <p class="font-semibold">Order #${order.id}</p>
+                            <p class="text-gray-600">Item: ${firstItem.name} (${firstItem.color})</p>
+                            <p class="text-gray-600">Total: ₱${order.total.toLocaleString()}</p>
+                            <p class="text-gray-600">Date: ${new Date(order.date).toLocaleDateString()}</p>
+                        `;
+                        orderDiv.appendChild(detailsDiv);
+
+                        carouselItem.appendChild(orderDiv);
+                    });
+
+                    // Ensure exactly 5 slots per page by adding placeholders if needed
+                    const currentSlots = pageOrders.length;
+                    const remainingSlots = ordersPerPage - currentSlots;
+                    for (let j = 0; j < remainingSlots; j++) {
+                        const placeholderDiv = document.createElement('div');
+                        placeholderDiv.classList.add('order-item-placeholder');
+                        placeholderDiv.innerHTML = `
+                            <div></div>
+                            <div></div>
+                        `;
+                        carouselItem.appendChild(placeholderDiv);
+                    }
+
+                    carouselItems.push(carouselItem);
+                }
+
+                console.log('Total carousel items created:', carouselItems.length); // Debug log
+
+                // Clear the carousel and append all items
+                carousel.innerHTML = '';
+                carouselItems.forEach(item => {
+                    carousel.appendChild(item);
+                });
+
+                // Function to update the carousel position
+                function updateCarousel() {
+                    carousel.style.transform = `translateX(-${currentPage * 100}%)`;
+                    prevBtn.disabled = currentPage === 0;
+                    nextBtn.disabled = currentPage === totalPages - 1;
+                    pageInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+                    console.log(`Updated carousel to page ${currentPage + 1} of ${totalPages}`); // Debug log
+                }
+
+                // Initial render
+                if (carouselItems.length > 0) {
+                    updateCarousel();
+                } else {
+                    carousel.innerHTML = '<p class="text-gray-600">No valid orders to display.</p>';
+                    prevBtn.disabled = true;
+                    nextBtn.disabled = true;
+                    pageInfo.textContent = '';
+                }
+
+                // Event listeners for navigation
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 0) {
+                        currentPage--;
+                        updateCarousel();
+                    }
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    if (currentPage < totalPages - 1) {
+                        currentPage++;
+                        updateCarousel();
+                    }
+                });
+
+                // Make orders clickable
+                carousel.addEventListener('click', (e) => {
+                    const orderItem = e.target.closest('.order-item');
+                    if (orderItem) {
+                        const orderId = orderItem.dataset.orderId;
+                        const order = orders.find(o => o.id.toString() === orderId);
+                        if (order) {
+                            console.log('Clicked order:', order); // Debug log
+                            displayOrderDetails(order);
+                        }
+                    }
+                });
+            }
+
+            const trackingForm = document.getElementById('tracking-form');
+            trackingForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const orderId = document.getElementById('order-id').value.trim();
+                const orders = JSON.parse(localStorage.getItem('orders')) || [];
+                const order = orders.find(o => o.id.toString() === orderId);
+                displayOrderDetails(order);
+            });
+
+            // Display all orders on page load
+            displayAllOrders();
+        });
+    </script>
+</body>
+</html>

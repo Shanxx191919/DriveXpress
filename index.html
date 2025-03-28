@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveXpress | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+    <link rel="apple-touch-icon" href="/assets/logo.png">
+    <meta name="msapplication-TileImage" content="/assets/logo.png">
+    <style>
+        .fade {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .selected-color {
+            color: #a3a6a0;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Fixed Navigation Bar at the Top -->
+    <nav class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-75 text-white z-20 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-red-500">DriveXpress</h1>
+            <ul class="flex space-x-6">
+                <li><a href="/home" class="hover:text-red-500 active border-b-2 border-red-500 pb-1">Home</a></li>
+                <li><a href="/view-cars" class="hover:text-red-500">Cars</a></li>
+                <li><a href="/about" class="hover:text-red-500">About</a></li>
+                <li><a href="/contact" class="hover:text-red-500">Contact</a></li>
+                <li><a href="/order-tracking" class="hover:text-red-500">Orders</a></li>
+                <li><a href="/cart" class="hover:text-red-500">Cart</a></li>
+                <li><a href="/dashboard" class="hover:text-red-500">Log In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Video Background Section (Intro Page) -->
+    <div class="relative w-full h-screen overflow-hidden mt-16">
+        <video autoplay muted loop class="absolute w-full h-full object-cover">
+            <source src="/assets/vid-template.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
+            <p class="mt-4 text-lg">Find the best deals on cars, parts, and accessories—all in one place. Quality, reliability, and performance at your fingertips.</p>
+            <h2 class="mt-4 text-5xl md:text-7xl font-bold text-red-500">Drive Your Dream. Own the Road.</h2>
+            <div class="mt-8">
+                <a href="/contact" class="mt-6 px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">Contact Us</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Cars Section -->
+    <section id="featured-cars" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-red-500">FEATURED CARS</h2>
+            <div class="w-16 h-1 bg-red-500 mx-auto mt-2 mb-6"></div> <!-- Decorative line -->
+            <p class="text-gray-600 mb-8 font-semibold">Discover the latest and most exciting cars in our Feature Cars section! From high-performance supercars to cutting-edge electric vehicles, we highlight the best in design, technology, and innovation. Stay updated with in-depth reviews, standout features, and expert insights into the hottest rides on the market!</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Car 1 -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="sedan">
+                    <img class="car-image" src="/assets/yaris/Silver.jpg" alt="Car 2" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-gray-300 rounded-full cursor-pointer" data-color="Silver" data-image="/assets/yaris/Silver.jpg"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White Pearl Crystal Shine" data-image="/assets/yaris/White-Pearl.jpg"></div>
+                            <div class="w-6 h-6 bg-red-700 rounded-full cursor-pointer" data-color="Red" data-image="/assets/yaris/Red.jpg"></div>
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Black" data-image="/assets/yaris/Black.jpg"></div>
+                            <div class="w-6 h-6 bg-gray-500 rounded-full cursor-pointer" data-color="Gray" data-image="/assets/yaris/Gray.jpg"></div>
+                            <div class="w-6 h-6 bg-red-500 rounded-full cursor-pointer" data-color="Scarlet" data-image="/assets/yaris/Scarlet.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Silver</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 1,120,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Yaris</p>
+                    <p class="text-gray-600 text-sm">85,000km | 1800cc | Automatic</p>
+                    <a href="/view-cars" class="view-car text-blue-500 hover:underline mt-2 inline-block">View Car</a>
+                </div>
+                <!-- Car 2 -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="pickup">
+                    <img class="car-image" src="/assets/rebel/white.jfif" alt="Car 3" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="Bright White" data-image="/assets/rebel/white.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #DC2626;" data-color="Flame Red" data-image="/assets/rebel/red.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #D2B48C;" data-color="Mojave Sand" data-image="/assets/rebel/sand.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4A1C1E;" data-color="Delmonico Red Pearl" data-image="/assets/rebel/maroon.jfif"></div>
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Diamond Black Crystal Pearl" data-image="/assets/rebel/black.jfif"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #1E40AF;" data-color="Hydro Blue Pearl" data-image="/assets/rebel/blue.jfif"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Bright White</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 5,990,000</p>
+                    <p class="text-gray-700 font-bold">RAM 1500 Rebel</p>
+                    <p class="text-gray-600 text-sm">50,000km | 5700cc | Automatic</p>
+                    <a href="/view-cars" class="view-car text-blue-500 hover:underline mt-2 inline-block">View Car</a>
+                </div>
+                <!-- Car 3 -->
+                <div class="car-card bg-white p-4 rounded-lg shadow-md" data-category="suv">
+                    <img class="car-image" src="/assets/fortuner/black.jpg" alt="Car 3" class="w-full h-48 object-cover rounded-md fade">
+                    <div class="mt-2 flex justify-center space-x-2">
+                        <span class="text-gray-600 text-sm">Available in</span>
+                        <div class="color-swatches flex space-x-2">
+                            <div class="w-6 h-6 bg-black rounded-full cursor-pointer" data-color="Black" data-image="/assets/fortuner/black.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #4B5563;" data-color="Gray" data-image="/assets/fortuner/Gray.jpg"></div>
+                            <div class="w-6 h-6 rounded-full cursor-pointer" style="background-color: #D1D5DB;" data-color="Silver" data-image="/assets/fortuner/Silver.jpg"></div>
+                            <div class="w-6 h-6 bg-white rounded-full border cursor-pointer" data-color="White Pearl" data-image="/assets/fortuner/White-pearl.jpg"></div>
+                        </div>
+                    </div>
+                    <p class="selected-color mt-2">Black</p>
+                    <p class="text-red-500 font-semibold mt-2">₱ 2,400,000</p>
+                    <p class="text-gray-700 font-bold">Toyota Fortuner</p>
+                    <p class="text-gray-600 text-sm">110,000km | 2400cc | Automatic</p>
+                    <a href="/view-cars" class="view-car text-blue-500 hover:underline mt-2 inline-block">View Car</a>
+                </div>
+            </div>
+            <!-- View All Cars Button -->
+            <div class="mt-8">
+                <a href="/view-cars" class="px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">View All Cars</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Options Section -->
+    <section id="payment" class="py-12 bg-gray-100">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Payment Options</h2>
+            <p class="text-gray-600 mb-8">Choose from our trusted payment methods to finance your dream car with ease and confidence.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- BDO Payment Option -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <img src="/assets/payment/bdo.jpg" alt="BDO Logo" class="w-32 h-auto mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">BDO Auto Loan</h3>
+                    <p class="text-gray-600 mb-4">Finance your car with BDO's flexible auto loan options. Enjoy competitive interest rates and a seamless application process.</p>
+                    <ul class="text-gray-600 text-sm text-left space-y-2">
+                        <li><strong>Interest Rate:</strong> 5.5% per annum (fixed for 1-5 years)</li>
+                        <li><strong>Loan Term:</strong> Up to 5 years</li>
+                        <li><strong>Requirements:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Valid government-issued ID</li>
+                                <li>Proof of income (e.g., ITR, payslips)</li>
+                                <li>Certificate of Employment (if employed)</li>
+                                <li>Minimum monthly income of ₱30,000</li>
+                                <li>Downpayment: 20% of the car's price</li>
+                            </ul>
+                        </li>
+                        <li><strong>Processing Time:</strong> 3-5 business days</li>
+                    </ul>
+                </div>
+                <!-- BPI Payment Option -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <img src="/assets/payment/bpi.png" alt="BPI Logo" class="w-32 h-auto mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">BPI Auto Loan</h3>
+                    <p class="text-gray-600 mb-4">Drive away with BPI's auto loan, offering low interest rates and fast approval for your car purchase.</p>
+                    <ul class="text-gray-600 text-sm text-left space-y-2">
+                        <li><strong>Interest Rate:</strong> 5.8% per annum (fixed for 1-6 years)</li>
+                        <li><strong>Loan Term:</strong> Up to 6 years</li>
+                        <li><strong>Requirements:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Two valid IDs (government-issued)</li>
+                                <li>Proof of income (e.g., BIR Form 2316, bank statements)</li>
+                                <li>Latest utility bill (for address verification)</li>
+                                <li>Minimum monthly income of ₱25,000</li>
+                                <li>Downpayment: 15% of the car's price</li>
+                            </ul>
+                        </li>
+                        <li><strong>Processing Time:</strong> 2-4 business days</li>
+                    </ul>
+                </div>
+                <!-- GCash Payment Option -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <img src="/assets/payment/gcash.jpg" alt="GCash Logo" class="w-32 h-auto mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">GCash GLoan</h3>
+                    <p class="text-gray-600 mb-4">Use GCash GLoan for a quick and convenient way to pay for your car with flexible installment plans.</p>
+                    <ul class="text-gray-600 text-sm text-left space-y-2">
+                        <li><strong>Interest Rate:</strong> 1.5% per month (18% per annum)</li>
+                        <li><strong>Loan Term:</strong> Up to 24 months</li>
+                        <li><strong>Requirements:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Active GCash account with a good GScore</li>
+                                <li>Verified GCash account (fully verified with ID)</li>
+                                <li>No existing unpaid GLoans</li>
+                                <li>Loan amount: Up to ₱125,000 (based on GScore)</li>
+                                <li>No downpayment required for small loans</li>
+                            </ul>
+                        </li>
+                        <li><strong>Processing Time:</strong> Instant approval upon eligibility</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shipping Methods Section -->
+    <section id="shipping" class="py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Shipping Methods</h2>
+            <p class="text-gray-600 mb-8">We offer reliable shipping options to ensure your car arrives safely and on time. Choose the method that suits you best.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- K Line Shipping Option -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <img src="/assets/shipping/k-line.png" alt="K Line Logo" class="w-32 h-auto mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">K Line Shipping</h3>
+                    <p class="text-gray-600 mb-4">K Line offers international shipping with a focus on safety and efficiency, ensuring your car arrives in top condition.</p>
+                    <ul class="text-gray-600 text-sm text-left space-y-2">
+                        <li><strong>Procedure:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Book your shipping slot through our website or contact our support team.</li>
+                                <li>Prepare your car for shipping (clean, remove personal items, ensure fuel tank is 1/4 full).</li>
+                                <li>Drop off your car at the designated port or arrange for pickup (additional fee applies).</li>
+                                <li>Track your shipment online using the provided tracking number.</li>
+                                <li>Pick up your car at the destination port or opt for door-to-door delivery (if available).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Estimated Delivery Time:</strong> 7-14 days (depending on destination)</li>
+                        <li><strong>Cost:</strong> Starts at ₱50,000 (varies by distance and car size)</li>
+                        <li><strong>Important Information:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Customs clearance and duties are the responsibility of the customer.</li>
+                                <li>Insurance is included for damages during transit (up to ₱500,000).</li>
+                                <li>Required documents: Car title, bill of sale, export permit, and valid ID.</li>
+                                <li>Ports served: Major international ports (e.g., Manila, Los Angeles, Tokyo).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Manila Forwarder Shipping Option -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <img src="/assets/shipping/manila-forwarder.png" alt="Manila Forwarder Logo" class="w-32 h-auto mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Manila Forwarder</h3>
+                    <p class="text-gray-600 mb-4">Manila Forwarder provides reliable domestic and international shipping with personalized customer service since 1998.</p>
+                    <ul class="text-gray-600 text-sm text-left space-y-2">
+                        <li><strong>Procedure:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Contact Manila Forwarder via their website (www.manilaforwarder.com) or our support team to schedule shipping.</li>
+                                <li>Prepare your car (remove personal items, ensure battery is disconnected, fuel tank 1/4 full).</li>
+                                <li>Drop off your car at their Manila facility or arrange for pickup (available in Metro Manila).</li>
+                                <li>Receive a tracking number to monitor your shipment's progress.</li>
+                                <li>Collect your car at the destination or opt for home delivery (additional fee applies).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Estimated Delivery Time:</strong> 5-10 days (domestic), 10-20 days (international)</li>
+                        <li><strong>Cost:</strong> Starts at ₱30,000 for domestic, ₱60,000 for international</li>
+                        <li><strong>Important Information:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Customs fees and taxes are the customer's responsibility for international shipments.</li>
+                                <li>Optional insurance available for purchase (covers up to ₱1,000,000).</li>
+                                <li>Required documents: Car registration, proof of ownership, and valid ID.</li>
+                                <li>Specializes in Balikbayan services; offers discounts for multiple shipments.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- NEX Worldwide Express Shipping Option -->
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <img src="/assets/shipping/images.png" alt="NEX Worldwide Express Logo" class="w-32 h-auto mx-auto mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">NEX Worldwide Express</h3>
+                    <p class="text-gray-600 mb-4">NEX Worldwide Express provides fast and secure global shipping, ensuring your car reaches its destination with ease.</p>
+                    <ul class="text-gray-600 text-sm text-left space-y-2">
+                        <li><strong>Procedure:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Schedule your shipment through our website or NEX's customer service.</li>
+                                <li>Prepare your car for shipping (remove personal items, ensure fuel tank is 1/4 full, secure loose parts).</li>
+                                <li>Drop off your car at a NEX facility or arrange for pickup (available in major cities).</li>
+                                <li>Use the tracking number provided to monitor your shipment in real-time.</li>
+                                <li>Receive your car at the destination port or opt for door-to-door delivery (additional fee applies).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Estimated Delivery Time:</strong> 5-12 days (depending on destination)</li>
+                        <li><strong>Cost:</strong> Starts at ₱55,000 (varies by distance and car size)</li>
+                        <li><strong>Important Information:</strong>
+                            <ul class="list-disc pl-5">
+                                <li>Customs clearance and duties are the customer's responsibility.</li>
+                                <li>Comprehensive insurance included (covers up to ₱750,000 for damages during transit).</li>
+                                <li>Required documents: Car title, export permit, proof of ownership, and valid ID.</li>
+                                <li>Offers express shipping for urgent deliveries (additional fee applies).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Measures Section -->
+    <section id="security" class="py-12 bg-gradient-to-r from-gray-100 to-gray-200">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4 tracking-tight">Security Measures & FAQs</h2>
+            <p class="text-gray-600 mb-8 text-lg">Your transactions are secured with SSL encryption, ensuring your data is protected. Below are answers to common questions about buying a car online with DriveXpress.</p>
+            <div class="space-y-4 max-w-3xl mx-auto">
+                <!-- FAQ 1 -->
+                <div class="faq-item bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <button class="faq-question w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                        <h3 class="text-lg font-semibold text-red-500">How secure is my payment information when I buy a car?</h3>
+                        <svg class="w-5 h-5 text-red-500 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer font-semibold p-5 text-gray-600 hidden">
+                        <p>At DriveXpress, we prioritize your security. All transactions are processed using SSL (Secure Socket Layer) encryption, which ensures that your payment details, such as credit card numbers or bank information, are transmitted securely. We also comply with PCI DSS (Payment Card Industry Data Security Standard) to protect your data. Additionally, we do not store your full payment information on our servers; it is handled directly by our trusted payment partners (BDO, BPI, and GCash).</p>
+                    </div>
+                </div>
+                <!-- FAQ 2 -->
+                <div class="faq-item bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <button class="faq-question w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                        <h3 class="text-lg font-semibold text-red-500">How can I be sure the car I'm buying is authentic and in good condition?</h3>
+                        <svg class="w-5 h-5 text-red-500 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer font-semibold p-5 text-gray-600 hidden">
+                        <p>We understand the importance of trust when buying a car online. Every car listed on DriveXpress undergoes a thorough inspection by our certified mechanics to ensure it meets our quality standards. We provide a detailed inspection report for each vehicle, including mileage, engine condition, and any repairs needed. Additionally, all cars come with a verified title and ownership history to prevent fraud. You can also request a virtual tour or in-person inspection before finalizing your purchase.</p>
+                    </div>
+                </div>
+                <!-- FAQ 3 -->
+                <div class="faq-item bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <button class="faq-question w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                        <h3 class="text-lg font-semibold text-red-500">What happens if I need to return the car after delivery?</h3>
+                        <svg class="w-5 h-5 text-red-500 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer font-semibold p-5 text-gray-600 hidden">
+                        <p>We offer a 7-day return policy for your peace of mind. If the car does not match the description provided or has undisclosed issues, you can initiate a return within 7 days of delivery. To qualify, the car must be in the same condition as when delivered (no additional damage or mileage over 100km). Contact our support team to start the return process. Note that shipping costs for returns are the customer's responsibility unless the issue is due to our error. Refunds will be processed within 5-10 business days after the car is returned and inspected.</p>
+                    </div>
+                </div>
+                <!-- FAQ 4 -->
+                <div class="faq-item bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <button class="faq-question w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                        <h3 class="text-lg font-semibold text-red-500">How long will it take for my car to be delivered after purchase?</h3>
+                        <svg class="w-5 h-5 text-red-500 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer font-semibold p-5 text-gray-600 hidden">
+                        <p>Delivery times depend on your chosen shipping method and location. With K Line Shipping, expect 7-14 days for international deliveries; Manila Forwarder offers 5-10 days for domestic and 10-20 days for international; NEX Worldwide Express delivers in 5-12 days. Once your payment is confirmed, we’ll provide a tracking number so you can monitor your shipment in real-time. Please ensure all required documents (e.g., car title, export permit) are submitted to avoid delays. Customs clearance for international shipments may add 2-5 days, depending on the destination country.</p>
+                    </div>
+                </div>
+                <!-- FAQ 5 -->
+                <div class="faq-item bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <button class="faq-question w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                        <h3 class="text-lg font-semibold text-red-500">What documents do I need to provide to buy a car?</h3>
+                        <svg class="w-5 h-5 text-red-500 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer font-semibold p-5 text-gray-600 hidden">
+                        <p>To purchase a car through DriveXpress, you’ll need to provide the following documents: a valid government-issued ID (e.g., passport, driver’s license), proof of address (e.g., utility bill), and proof of income if applying for financing (e.g., ITR, payslips, or bank statements). For international buyers, an export permit may be required depending on the destination country. If you’re using a loan (e.g., BDO or BPI Auto Loan), additional documents like a Certificate of Employment or BIR Form 2316 may be needed. All documents must be submitted digitally during the checkout process.</p>
+                    </div>
+                </div>
+                <!-- FAQ 6 -->
+                <div class="faq-item bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <button class="faq-question w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                        <h3 class="text-lg font-semibold text-red-500">Are there any hidden fees?</h3>
+                        <svg class="w-5 h-5 text-red-500 transform transition-transform duration-300 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer font-semibold p-5 text-gray-600 hidden">
+                        <p>We strive for transparency in all our transactions. The price you see for the car includes the base cost, but additional fees may apply, such as shipping costs (₱30,000-₱60,000 depending on the method), taxes (5-15% of the car price, calculated at checkout), and a processing fee (₱5,000). For international buyers, customs duties and clearance fees are your responsibility and vary by country. All fees will be clearly outlined in your cart before you confirm your purchase, so there are no surprises.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Policy Section -->
+    <section id="privacy-policy" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4 text-left">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4 tracking-tight text-center">Privacy Policy</h2>
+            <p class="text-gray-600 mb-8 text-lg text-center">At DriveXpress, we are committed to protecting your privacy. Below is an overview of how we collect, use, and safeguard your personal information.</p>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">What is a privacy policy?</h3>
+                    <p class="text-gray-600">A privacy policy is a legal document where we disclose what data we collect from users, how we manage the collected data, and how we use that data. The important objective of a privacy policy is to inform users how we collect, use, and manage the collected data.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Why is a privacy policy important?</h3>
+                    <p class="text-gray-600">The most important thing to remember is that a privacy policy is required by law if we collect data from users, either directly or indirectly. For example, if you submit a contact form on our website, we need a privacy policy. We also need a privacy policy because we use analytics tools such as Google Analytics to understand user behavior and improve our services.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Where do I put my privacy policy?</h3>
+                    <p class="text-gray-600">You can find our privacy policy here, in an easy-to-find location on our website. We recommend placing the privacy policy in a prominent location, such as the footer of the website, but we’ve included it as a dedicated section for clarity.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">What does the privacy policy include?</h3>
+                    <p class="text-gray-600">Our privacy policy includes: what data we collect from visitors (e.g., name, email, phone number, IP address), how we collect it (e.g., through forms, cookies, or analytics tools), why we are collecting the data (e.g., to process orders, improve our website), and how we are using the data (e.g., to fulfill orders, send promotional emails with consent, or analyze user behavior).</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">How do we protect your data?</h3>
+                    <p class="text-gray-600">We use industry-standard security measures, including SSL encryption, to protect your data during transmission. Our servers are secured with firewalls and access controls to prevent unauthorized access. However, no method of transmission over the internet is 100% secure, and while we strive to protect your information, we cannot guarantee absolute security.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">What are your rights and choices?</h3>
+                    <p class="text-gray-600">You have the right to access, update, or delete your personal information at any time by contacting us at support@drivexpress.com. You can also opt out of marketing emails by clicking the "unsubscribe" link in any email we send. We comply with applicable data protection laws, including the Data Privacy Act of 2012 in the Philippines, and you may request a copy of the data we hold about you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Refund Policy Section -->
+    <section id="refund-policy" class="py-12 bg-gray-100">
+        <div class="container mx-auto px-4 text-left">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4 tracking-tight text-center">Refund Policy</h2>
+            <p class="text-gray-600 mb-8 text-lg text-center">We want you to be completely satisfied with your purchase. Below are the details of our refund policy to ensure a fair and transparent process.</p>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">What is our return window?</h3>
+                    <p class="text-gray-600">We offer a 7-day return window for all car purchases. You may initiate a return within 7 days from the date of delivery if the car does not match the description provided or has undisclosed defects. This policy applies to both domestic and international purchases.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">What are the conditions for a return?</h3>
+                    <p class="text-gray-600">To be eligible for a return, the car must be in the same condition as when delivered, with no additional damage or modifications. The mileage should not exceed 100km beyond what was recorded at delivery. You must also provide proof of purchase (e.g., order confirmation email) and all original documentation that came with the car.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">How do I initiate a return?</h3>
+                    <p class="text-gray-600">To initiate a return, contact our support team at support@drivexpress.com or through our Contact page within 7 days of delivery. Provide your order number, a description of the issue, and photos of the car if applicable. We will review your request and provide instructions for returning the car, including the shipping address and any required documentation.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Who covers the return shipping costs?</h3>
+                    <p class="text-gray-600">Return shipping costs are the responsibility of the customer unless the return is due to an error on our part (e.g., wrong car delivered, undisclosed major defects). In such cases, we will cover the return shipping costs. We recommend using a trackable shipping method, as we are not responsible for items lost during return transit.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">How long does the refund process take?</h3>
+                    <p class="text-gray-600">Once we receive and inspect the returned car, we will process your refund within 5-10 business days. Refunds will be issued to the original payment method used for the purchase. Please note that shipping fees, taxes, and processing fees are non-refundable unless the return is due to our error.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/script.js"></script>
+    <script>
+        // Color selection functionality for Featured Cars
+        document.addEventListener('DOMContentLoaded', () => {
+            const carCards = document.querySelectorAll('.car-card');
+
+            carCards.forEach(card => {
+                const carImage = card.querySelector('.car-image');
+                const colorSwatches = card.querySelector('.color-swatches');
+                const selectedColor = card.querySelector('.selected-color');
+
+                colorSwatches.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('cursor-pointer')) {
+                        const color = e.target.getAttribute('data-color');
+                        const imageUrl = e.target.getAttribute('data-image');
+
+                        // Update selected color text
+                        selectedColor.textContent = color;
+
+                        // Add fade-out animation and change image
+                        carImage.classList.remove('fade');
+                        void carImage.offsetWidth; // Trigger reflow
+                        carImage.src = imageUrl;
+                        carImage.classList.add('fade');
+                    }
+                });
+            });
+        });
+
+        // FAQ Dropdown Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const icon = question.querySelector('.faq-icon');
+
+                    // Toggle the answer visibility
+                    answer.classList.toggle('hidden');
+
+                    // Rotate the icon
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

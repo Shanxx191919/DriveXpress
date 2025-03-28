@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveXpress | About</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+    <link rel="apple-touch-icon" href="./assets/logo.png">
+    <meta name="msapplication-TileImage" content="./assets/logo.png">
+</head>
+<body class="font-sans">
+    <!-- Fixed Navigation Bar at the Top -->
+    <nav class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-75 text-white z-20 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-red-500">DriveXpress</h1>
+            <ul class="flex space-x-6">
+                <li><a href="index.html" class="hover:text-red-500">Home</a></li>
+                <li><a href="view-cars.html" class="hover:text-red-500">Cars</a></li>
+                <li><a href="about.html" class="hover:text-red-500 active border-b-2 border-red-500 pb-1">About</a></li>
+                <li><a href="contact.html" class="hover:text-red-500">Contact</a></li>
+                <li><a href="/order-tracking" class="hover:text-red-500">Orders</a></li>
+                <li><a href="cart.html" class="hover:text-red-500">Cart</a></li>
+                <li><a href="/dashboard" class="hover:text-red-500">Log In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative w-full h-64 overflow-hidden mt-16">
+        <img src="./assets/car.jpg" alt="Car in motion" class="absolute w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-red-500">Learn More About Us</h2>
+            <p class="mt-2 text-gray-300">DriveXpress is dedicated to bringing you the latest news, expert reviews, and exclusive features on the most exciting vehicles in the industry.</p>
+        </div>
+    </div>
+
+    <!-- Our Goals Section -->
+    <section id="our-goals" class="py-12 bg-white">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/2">
+                <img src="./assets/mapbox-ZT5v0puBjZI-unsplash.jpg" alt="Team meeting" class="w-full h-64 object-cover rounded-md">
+            </div>
+            <div class="md:w-1/2">
+                <h2 class="text-3xl font-bold text-gray-800">Our Goals</h2>
+                <p class="mt-4 text-gray-600">At DriveXpress, our mission is to push the boundaries of automotive excellence by showcasing the most innovative, high-performance, and stylish vehicles on the market. <br> <br> We are committed to providing in-depth insights, expert reviews, and the latest industry trends to help car enthusiasts, buyers, and collectors make informed decisions. <br> <br> Our goal is to highlight cutting-edge technology, sustainable advancements, and revolutionary designs while delivering expert analysis and comparisons to keep our audience well-informed. We strive to build a strong community where car lovers can engage, share experiences, and stay updated on the latest automotive trends. <br> <br> Additionally, we promote eco-friendly vehicles and forward-thinking solutions that contribute to a more sustainable future. Whether you are passionate about speed, luxury, or future-ready innovations, DriveXpress is dedicated to fueling your love for cars and keeping you ahead of the curve. <br> <br> Beyond just delivering news and reviews, DriveXpress aims to build a thriving community where car lovers can connect, share their experiences, and engage in meaningful discussions. We are committed to promoting eco-friendly solutions and emerging technologies that contribute to a more sustainable and efficient future. Through our platform, we seek to inspire a new generation of automotive enthusiasts, celebrating both the legacy of classic automobiles and the potential of future innovations. <br> <br> Our passion for cars drives us to push boundaries, explore cutting-edge designs, and bring you the most exciting stories from the automotive world. Whether you are an industry professional, a collector, or simply a car enthusiast, DriveXpress is here to fuel your passion and keep you at the forefront of automotive excellence.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Send Us a Message Section -->
+    <section id="contact" class="relative w-full h-64 overflow-hidden">
+        <img src="./assets/car.jpg" alt="Car in motion" class="absolute w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-red-500">Send Us a Message</h2>
+            <p class="mt-2 text-gray-300">Have questions or feedback? We'd love to hear from you! Reach out to us, and our team at DriveXpress will get back to you as soon as possible.</p>
+            <a href="#contact" class="mt-6 px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-gray-100 text-center text-gray-600">
+        <p>Copyright © 2025 DriveXpress - Made by Shan</p>
+    </footer>
+
+    <script src="script.js">
+        // Increment pageviews on page load
+        document.addEventListener('DOMContentLoaded', () => {
+        let analytics = JSON.parse(localStorage.getItem('analytics')) || {
+            pageviews: 0,
+            satisfaction: 0,
+            traffic: { organic: 0, referral: 0, other: 0 },
+            browsers: { chrome: 0, firefox: 0, explorer: 0, safari: 0 }
+        };
+        analytics.pageviews = (analytics.pageviews || 0) + 1;
+        localStorage.setItem('analytics', JSON.stringify(analytics));
+    });
+    </script>
+</body>
+</html>

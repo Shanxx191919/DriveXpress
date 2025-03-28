@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveXpress | Contact</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+    <link rel="apple-touch-icon" href="./assets/logo.png">
+    <meta name="msapplication-TileImage" content="./assets/logo.png">
+    <style>
+        .star-rating {
+            display: flex;
+            gap: 5px;
+        }
+        .star {
+            font-size: 24px;
+            color: #d1d5db; /* Gray-300 */
+            cursor: pointer;
+        }
+        .star.filled {
+            color: #f59e0b; /* Yellow-500 */
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Fixed Navigation Bar at the Top -->
+    <nav class="fixed top-0 left-0 w-full bg-gray-800 bg-opacity-75 text-white z-20 py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-red-500">DriveXpress</h1>
+            <ul class="flex space-x-6">
+                <li><a href="index.html" class="hover:text-red-500">Home</a></li>
+                <li><a href="view-cars.html" class="hover:text-red-500">Cars</a></li>
+                <li><a href="about.html" class="hover:text-red-500">About</a></li>
+                <li><a href="contact.html" class="hover:text-red-500 active border-b-2 border-red-500 pb-1">Contact</a></li>
+                <li><a href="/order-tracking" class="hover:text-red-500">Orders</a></li>
+                <li><a href="cart.html" class="hover:text-red-500">Cart</a></li>
+                <li><a href="/dashboard" class="hover:text-red-500">Log In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative w-full h-64 overflow-hidden mt-16">
+        <img src="./assets/car.jpg" alt="Car in motion" class="absolute w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center h-full text-white text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-red-500">Feel Free to Contact Us</h2>
+            <p class="mt-2 text-gray-300">Have questions or feedback? We'd love to hear from you! Reach out to us, and our team at DriveXpress will get back to you as soon as possible.</p>
+        </div>
+    </div>
+
+    <!-- Contact Info Section -->
+    <section id="contact-info" class="py-12 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800">Contact Info</h2>
+            <div class="w-16 h-1 bg-red-500 mx-auto mt-2 mb-6"></div> <!-- Decorative line -->
+            <div class="flex flex-col md:flex-row justify-center gap-8 mt-8">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-red-500 rounded flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600">+63 333 4040 5656</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-red-500 rounded flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600">contact@drivexpress.com</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-red-500 rounded flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-600">Quezon City, Philippines</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form and Map Section -->
+    <section id="contact-form" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row gap-8">
+            <!-- Map -->
+            <div class="md:w-1/2">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123456.789!2d121.0444995!3d14.6760413!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b7b5f0c3b5d5%3A0x5e1b8c0d7b1b8c0!2sQuezon%20City%2C%20Metro%20Manila%2C%20Philippines!5e0!3m2!1sen!2sus!4v1697041234567!5m2!1sen!2sus" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <!-- Contact Form -->
+            <div class="md:w-1/2 bg-white p-6 rounded-lg shadow-md">
+                <form id="contact-form">
+                    <div class="flex flex-col md:flex-row gap-4 mb-4">
+                        <div class="w-full md:w-1/2">
+                            <label for="name" class="block text-gray-700">Your Name*</label>
+                            <input type="text" id="name" name="name" class="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                            <label for="email" class="block text-gray-700">Your Email*</label>
+                            <input type="email" id="email" name="email" class="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="subject" class="block text-gray-700">Subject</label>
+                        <input type="text" id="subject" name="subject" class="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="block text-gray-700">Message</label>
+                        <textarea id="message" name="message" rows="4" class="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Rate Your Experience*</label>
+                        <div class="star-rating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <input type="hidden" id="rating" name="rating" value="0" required>
+                    </div>
+                    <button type="submit" class="px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-gray-100 text-center text-gray-600">
+        <p>Copyright © 2025 DriveXpress - Made by Shan</p>
+    </footer>
+
+    <script>
+        // Increment pageviews on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            let analytics = JSON.parse(localStorage.getItem('analytics')) || {
+                pageviews: 0,
+                satisfaction: 0,
+                traffic: { organic: 0, referral: 0, other: 0 },
+                browsers: { chrome: 0, firefox: 0, explorer: 0, safari: 0 }
+            };
+            analytics.pageviews = (analytics.pageviews || 0) + 1;
+            localStorage.setItem('analytics', JSON.stringify(analytics));
+
+            // Star Rating Functionality
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating');
+
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const value = parseInt(star.getAttribute('data-value'));
+                    ratingInput.value = value;
+
+                    // Update star visuals
+                    stars.forEach(s => {
+                        const sValue = parseInt(s.getAttribute('data-value'));
+                        if (sValue <= value) {
+                            s.classList.add('filled');
+                        } else {
+                            s.classList.remove('filled');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseover', () => {
+                    const value = parseInt(star.getAttribute('data-value'));
+                    stars.forEach(s => {
+                        const sValue = parseInt(s.getAttribute('data-value'));
+                        if (sValue <= value) {
+                            s.classList.add('filled');
+                        } else {
+                            s.classList.remove('filled');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseout', () => {
+                    const currentValue = parseInt(ratingInput.value);
+                    stars.forEach(s => {
+                        const sValue = parseInt(s.getAttribute('data-value'));
+                        if (sValue <= currentValue) {
+                            s.classList.add('filled');
+                        } else {
+                            s.classList.remove('filled');
+                        }
+                    });
+                });
+            });
+
+            // Contact Form Submission
+            const contactForm = document.getElementById('contact-form');
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+                const rating = parseInt(document.getElementById('rating').value);
+
+                if (rating === 0) {
+                    alert('Please provide a rating.');
+                    return;
+                }
+
+                const concern = {
+                    name,
+                    email,
+                    subject,
+                    message,
+                    rating,
+                    date: new Date().toISOString()
+                };
+
+                // Save to localStorage
+                let concerns = JSON.parse(localStorage.getItem('concerns')) || [];
+                concerns.push(concern);
+                localStorage.setItem('concerns', JSON.stringify(concerns));
+
+                // Update customer satisfaction in analytics
+                let analytics = JSON.parse(localStorage.getItem('analytics')) || {
+                    pageviews: 0,
+                    satisfaction: 0,
+                    traffic: { organic: 0, referral: 0, other: 0 },
+                    browsers: { chrome: 0, firefox: 0, explorer: 0, safari: 0 }
+                };
+                const ratings = concerns.map(c => c.rating);
+                const averageRating = ratings.length > 0 ? (ratings.reduce((sum, r) => sum + r, 0) / ratings.length) : 0;
+                analytics.satisfaction = (averageRating / 5) * 100; // Convert to percentage (e.g., 4/5 stars = 80%)
+                localStorage.setItem('analytics', JSON.stringify(analytics));
+
+                alert('Thank you for your message!');
+                contactForm.reset();
+                stars.forEach(star => star.classList.remove('filled'));
+                ratingInput.value = 0;
+            });
+        });
+    </script>
+</body>
+</html>

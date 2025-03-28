@@ -1,0 +1,11 @@
+{
+    "rewrites": [
+      { "source": "/home", "destination": "/index.html" },
+      { "source": "/view-cars", "destination": "/view-cars.html" },
+      { "source": "/dashboard", "destination": "/dashboard.html" },
+      { "source": "/about", "destination": "/about.html" },
+      { "source": "/contact", "destination": "/contact.html" },
+      { "source": "/order-tracking", "destination": "/order-tracking.html" },
+      { "source": "/cart", "destination": "/cart.html" }
+    ]
+  }
