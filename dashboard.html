@@ -449,28 +449,23 @@
                 }
 
                 const carName = document.getElementById('car-name').value;
-                let defaultImageUrl = '/assets/placeholder.png'; // Fallback image
 
                 // Upload default image
                 const defaultFormData = new FormData();
                 defaultFormData.append('image', carImageFile);
                 defaultFormData.append('name', carName);
 
-                try {
-                    const defaultResponse = await fetch('/api/upload-image', {
-                        method: 'POST',
-                        body: defaultFormData,
-                    });
-                    if (!defaultResponse.ok) throw new Error('Upload failed');
-                    const defaultData = await defaultResponse.json();
-                    if (defaultData.url) {
-                        defaultImageUrl = defaultData.url;
-                    } else {
-                        alert('Warning: Default image upload failed, using placeholder.');
-                    }
-                } catch (error) {
-                    console.error('Default image upload error:', error);
-                    alert('Error uploading default image, using placeholder instead.');
+                let defaultImageUrl = '/assets/placeholder.png'; // Fallback
+                const defaultResponse = await fetch('/api/upload-image', {
+                    method: 'POST',
+                    body: defaultFormData,
+                });
+                const defaultData = await defaultResponse.json();
+                if (defaultData.url) {
+                    defaultImageUrl = defaultData.url;
+                } else {
+                    console.error('Default image upload failed:', defaultData);
+                    alert('Failed to upload default image, using placeholder.');
                 }
 
                 // Upload additional colors
@@ -491,22 +486,17 @@
                     additionalFormData.append('image', imageInput.files[0]);
                     additionalFormData.append('name', `${carName}-color-${colorId}`);
 
-                    let additionalImageUrl = '/assets/placeholder.png'; // Fallback image
-                    try {
-                        const additionalResponse = await fetch('/api/upload-image', {
-                            method: 'POST',
-                            body: additionalFormData,
-                        });
-                        if (!additionalResponse.ok) throw new Error('Upload failed');
-                        const additionalData = await additionalResponse.json();
-                        if (additionalData.url) {
-                            additionalImageUrl = additionalData.url;
-                        } else {
-                            alert(`Warning: Image upload for Color ${parseInt(colorId) + 1} failed, using placeholder.`);
-                        }
-                    } catch (error) {
-                        console.error(`Additional image upload error for Color ${colorId}:`, error);
-                        alert(`Error uploading image for Color ${parseInt(colorId) + 1}, using placeholder instead.`);
+                    let additionalImageUrl = '/assets/placeholder.png'; // Fallback
+                    const additionalResponse = await fetch('/api/upload-image', {
+                        method: 'POST',
+                        body: additionalFormData,
+                    });
+                    const additionalData = await additionalResponse.json();
+                    if (additionalData.url) {
+                        additionalImageUrl = additionalData.url;
+                    } else {
+                        console.error(`Additional image upload failed for Color ${colorId}:`, additionalData);
+                        alert(`Failed to upload image for Color ${parseInt(colorId) + 1}, using placeholder.`);
                     }
 
                     additionalColors.push({
