@@ -4,9 +4,11 @@ const { put } = require('@vercel/blob');
 const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 
 // Middleware to parse form data
 const upload = multer({ storage: multer.memoryStorage() });
